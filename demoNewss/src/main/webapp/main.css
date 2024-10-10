@@ -1,0 +1,12 @@
+
+body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+.article-content {
+    width: 600px; /* Adjust the width as needed */
+    white-space: pre-wrap; /* Preserve newlines and wrap text */
+    overflow-wrap: normal; /* Prevent breaking long words */
+    margin: 0 auto; /* Center the content */
+}
+        
