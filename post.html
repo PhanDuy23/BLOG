@@ -14,17 +14,25 @@
 </head>
 <body>
     
-    <div class="formPost">
-        <form action="" style=" width: 500px; border: 1px solid black;">
-            <input type="text" placeholder="Tiêu đề">
-            <br>
-            <label for="addImg">Thêm ảnh</label>
-            <input type="file" id="addImg"   name="image" accept="image/*" onchange="previewImage(event) " style="display: none;">
-            
-            <br>
-            <textarea name="content" id="" placeholder="Mô tả" max-rows="10" cols="50"></textarea>
-            <img id="imagePreview" style="display:none; max-width: 300px; max-height: 300px;">
-            <input type="submit" value="Lưu">
+    <div class="formPost" style="display: flex;justify-content: center;">
+        <form action="" style=" width: 500px; border: 1px solid black; display: flex; flex-direction: column;">
+            <h2>Bài viết mới</h2>
+            <select name="" id="type" style="width: 100px;">
+                <option value="" selected style="display: none;">Thể loại</option>
+                <option value="">Thể loại 1</option>
+                <option value="">thể loại 2</option>
+                <option value="">thể loại 3</option>
+            </select>
+            <label for="title">Tiêu đề:</label>
+            <input type="text" id="title" placeholder="Tiêu đề">
+            <label for="addImg">Link ảnh</label>
+            <input type="text" id="addImg"   name="image" >
+            <label for="content">Nội dung:</label>
+            <textarea name="content" id="content" placeholder="Mô tả" rows="10" cols="50"></textarea>
+            <div style="display: flex; justify-content: center;">
+
+                <input type="submit" value="Lưu" style="width: 40px;">
+            </div>
         </form>
     </div>
        <script>

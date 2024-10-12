@@ -3,15 +3,12 @@
 
 <head>
     <title>Form Đăng Nhập</title>
-    <link rel="stylesheet" href="style.css">
+   
     <style>
-        .container {
-            text-align: center;
-            margin-top: 100px;
-        }
+        
 
-        input[type=text],
-        input[type=password] {
+    
+        input {
             width: 200px;
             padding: 12px 20px;
             margin: 8px 0;
@@ -39,9 +36,10 @@
 </head>
 
 <body>
-    <div class="container">
-        <h1>Đăng nhập</h1>
-        <form>
+    <div class="container" style="display: flex; justify-content: center; ">
+        
+        <form style="display: flex; flex-direction: column; justify-content: center;">
+            <h1>Đăng nhập</h1>
             <label for="username">Tên đăng nhập:</label>
             <input type="text" id="username" name="username" required>
 
@@ -50,18 +48,11 @@
             <input type="password" id="password" name="password" required>
 
             <button type="submit">Đăng nhập</button>
+            <a href="link">Đăng kí</a>
         </form>
     </div>  
 
-    <script>
-        const form = document.querySelector('form');
 
-        form.addEventListener('submit', (event) => {
-            event.preventDefault();
-            // Thêm logic kiểm tra dữ liệu ở đây
-            console.log('Form submitted');
-        });
-    </script>
 </body>
 
 </html>
