@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Thông tin cá nhân</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            background-color: #fff;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-right: 1px solid #e9ecef;
+        }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            color: #000;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .sidebar a i {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+
+        .sidebar a.active {
+            font-weight: bold;
+        }
+
+        .content {
+            flex-grow: 1;
+            padding: 40px;
+        }
+
+        .content h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            font-size: 16px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .info-item i {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+
+        .info-item span {
+            color: #6c757d;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <a href="#" class="active"><i class="fas fa-user"></i>Thông tin tài khoản</a>
+        <a href="#"><i class="fas fa-comments"></i>Hoạt động bình luận</a>
+        <a href="#"><i class="fas fa-newspaper"></i>Bảng tin của bạn</a>
+        <a href="#"><i class="fas fa-eye"></i>Tin đã xem</a>
+        <a href="#"><i class="fas fa-bookmark"></i>Tin đã lưu</a>
+        <a href="#"><i class="fas fa-sign-out-alt"></i>Đăng xuất</a>
+    </div>
+    <div class="content">
+        <h1>Thông tin cá nhân</h1>
+        <div class="info-item">
+            <i class="fas fa-user"></i>
+            <div>
+                <div>Họ và tên</div>
+                <span></span>
+            </div>
+        </div>
+        <div class="info-item">
+            <i class="fas fa-birthday-cake"></i>
+            <div>
+                <div>Ngày sinh</div>
+                <span>dd/mm/yyyy</span>
+            </div>
+        </div>
+        <div class="info-item">
+            <i class="fas fa-venus-mars"></i>
+            <div>
+                <div>Giới tính</div>
+                <span>Khác</span>
+            </div>
+        </div>
+        <div class="info-item">
+            <i class="fas fa-phone"></i>
+            <div>
+                <div>Số điện thoại</div>
+                <span>Chưa có thông tin</span>
+            </div>
+        </div>
+        <div class="info-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <div>
+                <div>Địa chỉ</div>
+                <span>Chưa có thông tin</span>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
