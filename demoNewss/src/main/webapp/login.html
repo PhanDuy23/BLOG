@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Đăng Nhập</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .container {
+            text-align: center;
+            margin-top: 100px;
+        }
+
+        input[type=text],
+        input[type=password] {
+            width: 200px;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 200px;
+        }
+
+        button:hover {
+            opacity: 0.8;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Đăng nhập</h1>
+        <form>
+            <label for="username">Tên đăng nhập:</label>
+            <input type="text" id="username" name="username" required><br>
+
+            <label for="password">Mật khẩu:</label>
+            <input type="password" id="password" name="password" required><br>
+            <input type="checkbox" name="remember" value="ON"><br>
+            <button type="submit">Đăng nhập</button>
+        </form>
+    </div>  
+
+    <script>
+        const form = document.querySelector('form');
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            // Thêm logic kiểm tra dữ liệu ở đây
+            console.log('Form submitted');
+        });
+    </script>
+</body>
+
+</html>

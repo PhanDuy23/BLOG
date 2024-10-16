@@ -88,7 +88,22 @@ public class UpdatePostControl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");      
+        response.setContentType("text/html;charset=UTF-8");
+        String action = request.getServletPath();
+        DAO dao = new DAO();
+        if(action.equals("/tao-bai")){
+            List<Category> categories = dao.getAllCategories();
+            request.setAttribute("categories", categories);
+            request.getRequestDispatcher("/updatePost.jsp").forward(request, response);
+        }
+        else if(action.equals("/sua-bai")){
+            String pid = request.getParameter("pid");
+            Post post = dao.getPostByID(pid);
+            request.setAttribute("p", post);
+            request.getRequestDispatcher("/updatePost.jsp").forward(request, response);
+        }
     }
 
     /**

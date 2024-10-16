@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,57 +20,68 @@ import java.sql.Connection;
 
 
 
-@WebServlet(name = "loginControl", urlPatterns = {"/dang-nhap"})
-public class loginControl extends HttpServlet {
+@WebServlet(name = "LoginControl", urlPatterns = {"/dang-nhap"})
+public class LoginControl extends HttpServlet {
 
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        String acc = request.getParameter("username");
-        String pass = request.getParameter("password");
         
+    }
+
+    
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        //processRequest(request, response);
+        // lay cookie de hien thi len phan dang nhap
+        Cookie[] cookies = request.getCookies();
+        if(cookies != null){
+            for(Cookie c:cookies){
+                if(c.getName().equals("account")){
+                    request.setAttribute("account", c.getValue());
+                }
+                if(c.getName().equals("password")){
+                    request.setAttribute("password", c.getValue());
+                }
+            }
+        }
+        request.getRequestDispatcher("login.jsp").forward(request, response);
+        
+    }
+
+    
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        String acc = request.getParameter("account");
+        String pass = request.getParameter("password");
+        String remember = request.getParameter("remember");
+        System.out.println(acc + " " + pass);
         DAO dao = new DAO();
         User user = dao.login(acc,pass);
         if(user == null){
             request.setAttribute("message", "Tài khoản hoặc mật khẩu sai");
-            request.getRequestDispatcher("/form.jsp").forward(request,response);
+            request.getRequestDispatcher("/login.jsp").forward(request,response);
         }else{
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
             session.setMaxInactiveInterval(-1);
 //            response.sendRedirect("home");
-            request.getRequestDispatcher("home").forward(request,response);
+            Cookie account = new Cookie("account", acc);
+            Cookie password = new Cookie("password",pass);
+            account.setMaxAge(60*60*24*365);
+            if(remember != null){
+                password.setMaxAge(60*60*24*365);
+            }else{
+                password.setMaxAge(0);
+            }
+            response.addCookie(account);
+            response.addCookie(password);
+//            request.getRequestDispatcher("home").forward(request,response);
+            response.sendRedirect("home");
         }
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
     }
 
 

@@ -19,7 +19,7 @@ import jakarta.servlet.http.HttpSession;
  *
  * @author doanm
  */
-@WebServlet(name = "SignUpControl", urlPatterns = {"/signup"})
+@WebServlet(name = "SignUpControl", urlPatterns = {"/dang-ki"})
 public class SignUpControl extends HttpServlet {
 
     /**
@@ -34,50 +34,15 @@ public class SignUpControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String action = request.getParameter("action");
-        if (action == null){
-            response.sendRedirect("signup.jsp");
-        }
-        else{
-            String acc = request.getParameter("account");
-            DAO dao = new DAO();
-            if(dao.checkUserExist(acc)!=null){
-                request.setAttribute("errorMessage", "Tài khoản đã tồn tại");
-                request.getRequestDispatcher("signup.jsp").forward(request, response);
-                return;
-            }
-            
-            String pass = request.getParameter("password");
-            String repass = request.getParameter("repassword");
-            if(!pass.equals(repass)){
-                request.setAttribute("errorMessage", "Mật khẩu nhập vào không trùng nhau");
-                request.getRequestDispatcher("/signup.jsp").forward(request, response);
-            }else{
-                String name = request.getParameter("name");
-                User user = new User(acc,pass,name);
-                dao.signup(user);
-                HttpSession session = request.getSession();
-                session.setAttribute("user", user);
-                session.setMaxInactiveInterval(-1);
-                
-                response.sendRedirect("/home.jsp");
-            }
-        }
+        
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        response.setContentType("text/html;charset=UTF-8");
+        response.sendRedirect("signup.jsp");
     }
 
     /**
@@ -91,14 +56,33 @@ public class SignUpControl extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String acc = request.getParameter("account");
+        DAO dao = new DAO();
+        if(dao.checkUserExist(acc)!=null){
+            request.setAttribute("errorMessage", "Tài khoản đã tồn tại");
+            request.getRequestDispatcher("signup.jsp").forward(request, response);
+            return;
+        }
+
+        String pass = request.getParameter("password");
+        String repass = request.getParameter("repassword");
+        if(!pass.equals(repass)){
+            request.setAttribute("errorMessage", "Mật khẩu nhập vào không trùng nhau");
+            request.getRequestDispatcher("/signup.jsp").forward(request, response);
+        }else{
+            String name = request.getParameter("name");
+            User user = new User(acc,pass,name);
+            dao.signup(user);
+            HttpSession session = request.getSession();
+            session.setAttribute("user", user);
+            session.setMaxInactiveInterval(-1);
+
+            response.sendRedirect("/home.jsp");
+        }
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
+    
+    
     @Override
     public String getServletInfo() {
         return "Short description";

@@ -35,25 +35,33 @@ public class CategoryControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
         String slug = request.getPathInfo();
-        if(slug != null && slug.length() > 1){
-            slug = slug.substring(1);
-            System.out.println(slug);
-            DAO dao = new DAO();
-            List<Category> listC = dao.getAllCategories();
-            // tim category co cslug = slug
-            int categoryID=1;
-            for (Category c : listC){
-                if(c.getCslug().equals(slug)){
-                    categoryID = c.getCategoryID();
-                    break;
+ 
+        if(slug != null){
+            if(slug.length() > 1){
+                slug = slug.substring(1);
+                System.out.println(slug);
+                DAO dao = new DAO();
+                List<Category> listC = dao.getAllCategories();
+                // tim category co cslug = slug
+                int categoryID=1;
+                for (Category c : listC){
+                    if(c.getCslug().equals(slug)){
+                        categoryID = c.getCategoryID();
+                        break;
+                    }
                 }
+                request.setAttribute("entry", categoryID+"");
+                request.getRequestDispatcher("paging").forward(request,response);
+            }else{
+                String entry = request.getParameter("entry");// entry = slug
+                String index = request.getParameter("index");
+                request.setAttribute("entry", entry);
+                request.setAttribute("index", index);
+                request.getRequestDispatcher("paging").forward(request, response);
             }
-            List<Post> listP = dao.getPostsByCategory(categoryID+"");
-            request.setAttribute("listC", listC);
-            request.setAttribute("listP", listP);
-            request.setAttribute("category", dao.getCategoryByID(categoryID+""));
-            request.getRequestDispatcher("/home.jsp").forward(request,response);
         }
     }
 

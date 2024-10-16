@@ -34,11 +34,10 @@ public class LikeControl extends HttpServlet {
             DAO dao = new DAO();
             dao.like(userID,postID);
             Post post = dao.getPostByID(postID);
-            request.setAttribute("p", post);
-            String url = "/post/" + post.getPslug();
-            request.getRequestDispatcher(url).forward(request, response);
+            String url = "post/" + post.getPslug();
+            response.sendRedirect(url);
         }else{
-            response.sendRedirect("form.jsp");
+            response.sendRedirect("login.jsp");
         }
     }
 

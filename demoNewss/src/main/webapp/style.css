@@ -1,29 +1,50 @@
-.container {
-    text-align: center;
-    margin-top: 100px;
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    background-color: #fff;
 }
-
-input[type=text], input[type=password] {
-    width: 200px;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    box-sizing: border-box;   
-
+.sidebar {
+    width: 250px;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-right: 1px solid #e9ecef;
 }
-
-button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
-    border: none;
-    cursor: pointer;
-    width: 200px;
+.sidebar a {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    color: #000;
+    text-decoration: none;
+    font-size: 16px;
 }
-
-button:hover {
-    opacity: 0.8;   
-
+.sidebar a i {
+    margin-right: 10px;
+    font-size: 20px;
+}
+.sidebar a.active {
+    font-weight: bold;
+}
+.content {
+    flex-grow: 1;
+    padding: 40px;
+}
+.content h1 {
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+.info-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    font-size: 16px;
+    border-bottom: 1px solid #e9ecef;
+}
+.info-item i {
+    margin-right: 10px;
+    font-size: 20px;
+}
+.info-item span {
+    color: #6c757d;
 }

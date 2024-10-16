@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thêm bài mới</title>
+    <style>
+        *{
+            position: relative;
+            padding: 5px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="formPost" style="display: flex;justify-content: center;">
+        <form action="" style=" width: 500px; border: 1px solid black; display: flex; flex-direction: column;">
+            <h2>Bài viết mới</h2>
+            <select name="" id="type" style="width: 100px;">
+                <option value="" selected style="display: none;">Thể loại</option>
+                <option value="">Thể loại 1</option>
+                <option value="">thể loại 2</option>
+                <option value="">thể loại 3</option>
+            </select>
+            <label for="title">Tiêu đề:</label>
+            <input type="text" id="title" placeholder="Tiêu đề">
+            <label for="addImg">Link ảnh</label>
+            <input type="text" id="addImg"   name="image" >
+            <label for="content">Nội dung:</label>
+            <textarea name="content" id="content" placeholder="Mô tả" rows="10" cols="50"></textarea>
+            <div style="display: flex; justify-content: center;">
+
+                <input type="submit" value="Lưu" style="width: 40px;">
+            </div>
+        </form>
+    </div>
+       <script>
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('imagePreview');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+</body>
+</html>

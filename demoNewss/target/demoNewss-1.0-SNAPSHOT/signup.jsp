@@ -9,7 +9,7 @@
     </head>
     <body>
         <h1>ĐĂNG KÝ</h1>
-        <form action="signup" method="post">
+        <form action="dang-ki" method="post">
             <label>Họ tên</label>
             <input type ="text" name ="name" required><br>
             <label>Tài khoản</label>
