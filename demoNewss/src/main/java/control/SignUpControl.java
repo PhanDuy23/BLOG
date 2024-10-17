@@ -77,7 +77,7 @@ public class SignUpControl extends HttpServlet {
             session.setAttribute("user", user);
             session.setMaxInactiveInterval(-1);
 
-            response.sendRedirect("/home.jsp");
+            response.sendRedirect("paging");
         }
     }
 

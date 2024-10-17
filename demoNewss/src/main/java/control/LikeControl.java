@@ -32,6 +32,8 @@ public class LikeControl extends HttpServlet {
             String postID = request.getParameter("pid");
             int userID = user.getUserID();
             DAO dao = new DAO();
+            System.out.println("userID =" + userID);
+            System.out.println("postID =" + postID);
             dao.like(userID,postID);
             Post post = dao.getPostByID(postID);
             String url = "post/" + post.getPslug();

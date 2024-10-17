@@ -76,11 +76,13 @@
         
         <!--CAC MUC TIN-->
         <div class="menu" style="display: flex; border: 1px solid black; width: 70%; ">
-            <a href="link">Tin mới nhất</a>
-            <a href="link">Tin được yêu thích nhất</a>
+            <a href="${pageContext.request.contextPath}/paging?mucTin=tin-xu-huong&trang=1">Tin xu hướng</a>
+            <a href="${pageContext.request.contextPath}/paging?mucTin=tin-duoc-yeu-thich&trang=1">Tin được yêu thích nhất</a>
+            
             <c:forEach var="o" items="${listC}">
-                    <a href="${pageContext.request.contextPath}/category/${o.cslug}" >${o.cname}</a>
+                <a href="${pageContext.request.contextPath}/paging?mucTin=${o.cslug}&trang=1" >${o.cname}</a>
             </c:forEach>
+            
         </div>
         
         <div class="articel" style="border: 1px solid black; width: 70%;">
