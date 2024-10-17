@@ -51,8 +51,7 @@
         
         <!--Ô TÀI KHOẢN-->
         <div class="login" style="display: flex;   width: 70%; justify-content: end;">
-            <div class="taikhoan"
-                style="display: flex; flex-direction: column;z-index: 4;  justify-content: center;align-items: center;  border: 1px solid black;">
+            <div class="taikhoan" style="display: flex; flex-direction: column;z-index: 4;  justify-content: center;align-items: center;  border: 1px solid black;">
                 <i class="fa-regular fa-user"></i>
                 <c:if test="${sessionScope.user == null}">
                     <p class="taikhoan">Tài khoản</p>
@@ -61,14 +60,27 @@
                     <p class="taikhoan">Xin chào, ${user.uname} </p>
                 </c:if>
                 <div class="thanhtaikhoan">
-                    <div style="display: flex; flex-direction: column; justify-content: space-around;">
-                        <div
-                            style="background-color: #C92127; color: rgb(22, 5, 5); margin: 10px; border-radius: 5px; text-align: center; padding: 10px;">
-                            <a href="${pageContext.request.contextPath}/dang-nhap">Đăng nhập</a></div>
-                        <div
-                            style="background-color: rgb(189, 20, 20);margin: 10px; border: 1px solid #ddd6d7;padding: 10px; border-radius: 5px; text-align: center;">
-                            <a href="${pageContext.request.contextPath}/dang-ki">Đăng kí</a></div>
-                    </div>
+                    <c:if test="${sessionScope.user == null}">
+                        <div style="display: flex; flex-direction: column; justify-content: space-around;">
+                            <div
+                                style="background-color: #C92127; color: rgb(22, 5, 5); margin: 10px; border-radius: 5px; text-align: center; padding: 10px;">
+                                <a href="dang-nhap">Đăng nhập</a></div>
+                            <div
+                                style="background-color: rgb(189, 20, 20);margin: 10px; border: 1px solid #ddd6d7;padding: 10px; border-radius: 5px; text-align: center;">
+                                <a href="dang-ki">Đăng kí</a></div>
+                        </div>
+                    </c:if>
+                    <c:if test="${sessionScope.user != null}">
+                        <div class="loggedIn" style="display: flex; flex-direction: column; background-color: rgb(118, 112, 112);">
+                            <a href="">Thông tin tài khoản</a>
+                            <a href="">Hoạt động bình luận</a>
+                            <c:if test="${sessionScope.user.ueditor == true}">
+                                <a href="${pageContext.request.contextPath}/tao-bai">Bài viết của bạn</a>
+                            </c:if>
+                            <a href="">Tin yêu thích</a>
+                            <a href="">Đăng xuất</a>
+                        </div>
+                    </c:if>
                 </div>
             </div>
             <input type="text" placeholder="tìm kiếm" style="height: 40px;">
@@ -90,7 +102,7 @@
             <h3>${p.ptitle}</h3>
             
             <a href="#">${p.editorName}</a>
-            <p>${p.ptime}</p>
+            <p>${p.dayOfWeek}, ${p.formattedPtime}</p>
             <img src="${p.pimage}" alt="ảnh" width="90%" >
             
             <div>
@@ -106,7 +118,7 @@
             <c:forEach var="o" items="${comments}">
                 <div style=" border: 1px solid black"> 
                     <a href="#">${o.userName}</a>
-                    <p>${o.ctime}</p>
+                    <p>${o.dayOfWeek}, ${o.formattedCtime}</p>
                     <p>${o.ccontent}</p>
                 </div>
             </c:forEach>

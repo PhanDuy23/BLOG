@@ -47,6 +47,8 @@ public class PagingControl extends HttpServlet {
         String entry="";
         String entry1 = (String)session.getAttribute("mucTin");
         String entry2 = request.getParameter("mucTin");
+        System.out.println("entry1="+entry1);
+        System.out.println("entry2="+entry2);
         if(entry1 == null && entry2 == null){
             entry="";
         }else if(entry1 != null && entry2 == null){
@@ -55,15 +57,18 @@ public class PagingControl extends HttpServlet {
         }else if(entry1 == null && entry2 != null){
             entry = entry2;
             session.setAttribute("mucTin", entry);
-        }else if (!entry1.equals(entry2)){
+        }else{// entry1.equals(entry2) or not 
             entry = entry2;
             session.setAttribute("mucTin",entry);
         }
         DAO dao = new DAO();
+
         if(!entry.isEmpty()){
+            request.setAttribute("entry",entry);
             if(entry.equals("tin-xu-huong")){
                 request.setAttribute("entryName", "Tin xu hướng");
-            }else if(entry.equals("tin-duoc-yeu-thich")){
+            }
+            else if(entry.equals("tin-duoc-yeu-thich")){
                 request.setAttribute("entryName", "Tin được yêu thích nhất");
             }else{
                 List<Category> l = dao.getAllCategories();
@@ -75,13 +80,15 @@ public class PagingControl extends HttpServlet {
                 }
             }
         }
-
+        System.out.println("entry="+entry);
+        System.out.println("index="+index);
         List<Post> listP = dao.get10Posts(entry, index);
         request.setAttribute("listP", listP);
         List<Category> listC = dao.getAllCategories();
         request.setAttribute("listC", listC);
-
+        
         request.setAttribute("totalPages", dao.getTotalPages(entry));
+        
         request.getRequestDispatcher("home.jsp").forward(request, response);
     }
 
@@ -123,5 +130,5 @@ public class PagingControl extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
+    
 }

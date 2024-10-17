@@ -5,6 +5,10 @@
 package entity;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  *
@@ -12,10 +16,11 @@ import java.io.Serializable;
  */
 public class Comment implements Serializable{
     private int commentID;
-    private String ccontent, ctime, userName;
+    private String ccontent, userName;
     private int userID, postID;
+    private Timestamp ctime;
 
-    public Comment(int commentID, String ccontent, String ctime, String userName, int userID, int postID) {
+    public Comment(int commentID, String ccontent, Timestamp ctime, String userName, int userID, int postID) {
         this.commentID = commentID;
         this.ccontent = ccontent;
         this.ctime = ctime;
@@ -29,7 +34,22 @@ public class Comment implements Serializable{
         this.userID = userID;
         this.postID = postID;
     }
-    
+    public String getDayOfWeek() {
+        if (this.ctime == null) {
+            return "N/A"; // hoặc một giá trị mặc định khác
+        }
+        Locale vietnam = new Locale.Builder().setLanguage("vi").setRegion("VN").build();
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE", vietnam);
+        return sdf.format(this.ctime);
+    }
+
+    public String getFormattedCtime() {
+        if (this.ctime == null) {
+            return "N/A"; // hoặc một giá trị mặc định khác
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        return sdf.format(ctime);
+    }
     public int getCommentID() {
         return commentID;
     }
@@ -46,11 +66,11 @@ public class Comment implements Serializable{
         this.ccontent = ccontent;
     }
 
-    public String getCtime() {
+    public Date getCtime() {
         return ctime;
     }
 
-    public void setCtime(String ctime) {
+    public void setCtime(Timestamp ctime) {
         this.ctime = ctime;
     }
 
@@ -77,6 +97,17 @@ public class Comment implements Serializable{
     public void setPostID(int postID) {
         this.postID = postID;
     }
-    
+    public static void main(String[] args) {
+//        Locale vietnam = new Locale.Builder().setLanguage("vi").setRegion("VN").build();
+//        SimpleDateFormat sdf = new SimpleDateFormat("EEEE", vietnam);
+//        Date d = new Date("2024-07-12 12:12:12")
+//        String wd = sdf.format();
+//        
+//        sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+//        String date = sdf.format("2024-07-12 12:12:12");
+//        
+//        System.out.println(wd + " " + date);
+        
+    }
     
 }

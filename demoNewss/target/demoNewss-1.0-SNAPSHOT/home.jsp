@@ -47,9 +47,10 @@
     <header>
         <a href="${pageContext.request.contextPath}/paging">Trang tin tức</a>
     </header>
-
+    
+    <!--BODY-->
     <div class="body" style="display: flex; flex-direction: column; align-items: center; ">
-
+        <!--Ô TÀI KHOẢN-->
         <div class="login" style="display: flex;   width: 70%; justify-content: end;">
             <div class="taikhoan" style="display: flex; flex-direction: column;z-index: 4;  justify-content: center;align-items: center;  border: 1px solid black;">
                 <i class="fa-regular fa-user"></i>
@@ -87,7 +88,7 @@
         </div>
 
 
-
+        <!--CÁC CHUYÊN MỤC-->
         <div class="menu" style="display: flex; border: 1px solid black; width: 70%; ">
             <a href="${pageContext.request.contextPath}/paging?mucTin=tin-xu-huong&trang=1">Tin xu hướng</a>
             <a href="${pageContext.request.contextPath}/paging?mucTin=tin-duoc-yeu-thich&trang=1">Tin được yêu thích nhất</a>
@@ -98,6 +99,7 @@
             
         </div>
         
+        <!--TÊN CHUYÊN MỤC VÀ CÁC BÀI BÁO-->
         <div class="newsContainer1" style="display: flex; flex-direction: column; width: 70%; ">
             
                 <c:if test = "${entryName != null}">
@@ -115,13 +117,18 @@
                             <img src="${o.pimage}" alt="ảnh" width="30%">
                             <div style = "display: flex; flex-direction: column">
                                 <h4>${o.editorName}</h4>
-                                <h4>${o.ptime}</h4>
+                                <h4>${o.dayOfWeek}, ${o.formattedPtime}</h4>
+                                <c:if test="${entry == 'tin-duoc-yeu-thich'}">
+                                    <p>Lượt thích: ${o.plikes}</p>
+                                </c:if>
+                                <c:if test="${entry == 'tin-xu-huong'}">
+                                    <p>Lượt xem: ${o.pclicks}</p>
+                                </c:if>
                             </div>
                         </div>
                     <!--<pre></pre>-->
                     </div>
                 </c:forEach>
-            
         </div>
 <!--        <div class="newsContainer2" style="display: none; flex-direction: column; width: 70%; border: 1px solid black;">
             <div class="oneNews" style="border: 1px solid black;">
@@ -147,10 +154,9 @@
             </div>
 
         </div>-->
-
-
-
     </div>
+            
+    <!--PHÂN TRANG TIN-->
     <div class="button" style="display: flex;  justify-content: center;">
         <c:forEach var="i" begin="1" end="${totalPages}">
             <c:if test="${mucTin==null}">

@@ -13,8 +13,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  *
@@ -49,7 +53,7 @@ public class DAO {
                         rs.getString(2),
                         rs.getString(3),
                         rs.getString(4),
-                        rs.getString(5),
+                        rs.getTimestamp(5),
                         rs.getInt(6),
                         rs.getInt(7),
                         rs.getString(8),
@@ -59,23 +63,6 @@ public class DAO {
             return list;
         }catch(Exception e){
             
-        }
-        return null;
-    }
-    public List<Category> getAllCategories(){
-        List<Category> list = new ArrayList<>();
-        String query = "select * from categories";
-        try{
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            rs = ps.executeQuery();
-            while(rs.next()){
-                list.add(new Category(rs.getInt(1),
-                        rs.getString(2)));
-            }
-            close();
-            return list;
-        }catch(Exception e){
         }
         return null;
     }
@@ -97,7 +84,7 @@ public class DAO {
                         rs.getString(2),
                         rs.getString(3),
                         rs.getString(4),
-                        rs.getString(5),
+                        rs.getTimestamp(5),
                         rs.getInt(6),
                         rs.getInt(7),
                         rs.getString(8),
@@ -139,7 +126,7 @@ public class DAO {
                 + "from posts as p, users as u, categories as c\n"
                 + "where p.userID = u.userID\n"
                 + "and p.categoryID = c.categoryID\n"
-                + "and ptime >= now() - interval 1 week\n"
+                + "and ptime >= now() - interval 2 week\n"
                 + "order by p.pclicks desc\n"
                 + "limit 10 offset ?;";
         try{
@@ -165,7 +152,7 @@ public class DAO {
                         rs.getString(2),
                         rs.getString(3),
                         rs.getString(4),
-                        rs.getString(5),
+                        rs.getTimestamp(5),
                         rs.getInt(6),
                         rs.getInt(7),
                         rs.getString(8),
@@ -174,28 +161,9 @@ public class DAO {
             close();
             return list;
         }catch(Exception e){
-            
-        }
-        return null;
-    }
-    public int getCategoryIDByName(String cname){
-        String query = "select categoryID \n"
-                + "from categories\n"
-                + "where cname = ?; ";
-        int res = 0;
-        try{
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setString(1, cname);
-            rs = ps.executeQuery();
-            if(rs.next()){
-                res = rs.getInt(1);
-            }
-            close();
-        }catch(Exception e){
             e.printStackTrace();
         }
-        return res;
+        return null;
     }
     public Post getPostByID(String id){
        String query = "select p.postID, p.ptitle, p.pimage,p.pcontent,p.ptime,p.plikes,p.pclicks,u.uname,c.cname\n"
@@ -214,7 +182,7 @@ public class DAO {
                        rs.getString(2),
                        rs.getString(3),
                        rs.getString(4),
-                       rs.getString(5),
+                       rs.getTimestamp(5),
                        rs.getInt(6),
                        rs.getInt(7),
                        rs.getString(8),
@@ -225,72 +193,8 @@ public class DAO {
        }catch(Exception e){
        }
        return null;
-   }
-    public List<Post> search(String txt){
-        String query = "select p.postID, p.ptitle, p.pimage,p.pcontent,p.ptime,p.plikes,p.pclicks,u.uname,c.cname\n"
-               + "from posts as p, users as u, categories as c\n"
-               + "where p.userID = u.userID\n"
-               + "and p.categoryID = c.categoryID\n"
-               + "and (p.ptitle like ? or p.pcontent like ?);"; 
-               
-        List<Post> list = new ArrayList<>();
-        try{
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setString(1, "%" + txt + "%");
-            ps.setString(2, "%" + txt + "%");
-            rs = ps.executeQuery();
-            while(rs.next()){
-                list.add(new Post(rs.getInt(1),
-                       rs.getString(2),
-                       rs.getString(3),
-                       rs.getString(4),
-                       rs.getString(5),
-                       rs.getInt(6),
-                       rs.getInt(7),
-                       rs.getString(8),
-                       rs.getString(9)));
-            }
-            close();
-            
-        }catch(Exception e){
-        }
-        return list;
     }
-    public List<Post> searchWithCategory(String txt, String categoryID){
-        String query = "select p.postID, p.ptitle, p.pimage,p.pcontent,p.ptime,p.plikes,p.pclicks,u.uname,c.cname\n"
-               + "from posts as p, users as u, categories as c\n"
-               + "where p.userID = u.userID\n"
-               + "and p.categoryID = c.categoryID\n"
-               + "and (p.ptitle like ? or p.pcontent like ?)\n"
-               + "and p.categoryID = ? ; "; 
-               
-        List<Post> list = new ArrayList<>();
-        try{
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setString(1, "%" + txt + "%");
-            ps.setString(2, "%" + txt + "%");
-            ps.setString(3, categoryID);
-            rs = ps.executeQuery();
-            while(rs.next()){
-                list.add(new Post(rs.getInt(1),
-                       rs.getString(2),
-                       rs.getString(3),
-                       rs.getString(4),
-                       rs.getString(5),
-                       rs.getInt(6),
-                       rs.getInt(7),
-                       rs.getString(8),
-                       rs.getString(9)));
-            }
-            close();
-            
-        }catch(Exception e){
-        }
-        return list;
-    }
-      public List<Post> getLikedPosts(int userID){
+    public List<Post> getLikedPosts(int userID){
         String query = "select p.postID, p.ptitle, p.pimage,p.pcontent,p.ptime,p.plikes,p.pclicks,u.uname,c.cname\n"
                 + "from posts as p, users as u, categories as c, favorites as f\n"
                 + "where p.userID = u.userID\n"
@@ -308,7 +212,7 @@ public class DAO {
                        rs.getString(2),
                        rs.getString(3),
                        rs.getString(4),
-                       rs.getString(5),
+                       rs.getTimestamp(5),
                        rs.getInt(6),
                        rs.getInt(7),
                        rs.getString(8),
@@ -320,7 +224,6 @@ public class DAO {
             e.printStackTrace();
         }
         return null;
-    
     }
     public void addPost(Post post){
         String query = "insert into posts (ptitle,pimage,pcontent,ptime,plikes,pclicks,userID,categoryID)\n"
@@ -368,6 +271,42 @@ public class DAO {
         } catch (Exception e) {
         }
     }
+    public List<Category> getAllCategories(){
+        List<Category> list = new ArrayList<>();
+        String query = "select * from categories";
+        try{
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            while(rs.next()){
+                list.add(new Category(rs.getInt(1),
+                        rs.getString(2)));
+            }
+            close();
+            return list;
+        }catch(Exception e){
+        }
+        return null;
+    }
+    public int getCategoryIDByName(String cname){
+        String query = "select categoryID \n"
+                + "from categories\n"
+                + "where cname = ?; ";
+        int res = 0;
+        try{
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, cname);
+            rs = ps.executeQuery();
+            if(rs.next()){
+                res = rs.getInt(1);
+            }
+            close();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return res;
+    }
     public String getCategoryByID(String categoryID){
         String query = "select cname from categories\n"
                 + "where categoryID = ?;";
@@ -387,6 +326,98 @@ public class DAO {
         }
         return null;
     }
+    // USERS
+    public User getUserByAccount(String acc){
+        String query = "SELECT * FROM users\n"
+                + "where uaccount = ? ;";
+        User user = null;
+        try{
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, acc);
+            rs = ps.executeQuery();
+            if(rs.next()){
+                user = new User(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getBoolean(5));
+            }
+            close();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return user;
+    }
+    
+    
+    public List<Post> search(String txt){
+        String query = "select p.postID, p.ptitle, p.pimage,p.pcontent,p.ptime,p.plikes,p.pclicks,u.uname,c.cname\n"
+               + "from posts as p, users as u, categories as c\n"
+               + "where p.userID = u.userID\n"
+               + "and p.categoryID = c.categoryID\n"
+               + "and (p.ptitle like ? or p.pcontent like ?);"; 
+               
+        List<Post> list = new ArrayList<>();
+        try{
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, "%" + txt + "%");
+            ps.setString(2, "%" + txt + "%");
+            rs = ps.executeQuery();
+            while(rs.next()){
+                list.add(new Post(rs.getInt(1),
+                       rs.getString(2),
+                       rs.getString(3),
+                       rs.getString(4),
+                       rs.getTimestamp(5),
+                       rs.getInt(6),
+                       rs.getInt(7),
+                       rs.getString(8),
+                       rs.getString(9)));
+            }
+            close();
+            
+        }catch(Exception e){
+        }
+        return list;
+    }
+    public List<Post> searchWithCategory(String txt, String categoryID){
+        String query = "select p.postID, p.ptitle, p.pimage,p.pcontent,p.ptime,p.plikes,p.pclicks,u.uname,c.cname\n"
+               + "from posts as p, users as u, categories as c\n"
+               + "where p.userID = u.userID\n"
+               + "and p.categoryID = c.categoryID\n"
+               + "and (p.ptitle like ? or p.pcontent like ?)\n"
+               + "and p.categoryID = ? ; "; 
+               
+        List<Post> list = new ArrayList<>();
+        try{
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, "%" + txt + "%");
+            ps.setString(2, "%" + txt + "%");
+            ps.setString(3, categoryID);
+            rs = ps.executeQuery();
+            while(rs.next()){
+                list.add(new Post(rs.getInt(1),
+                       rs.getString(2),
+                       rs.getString(3),
+                       rs.getString(4),
+                       rs.getTimestamp(5),
+                       rs.getInt(6),
+                       rs.getInt(7),
+                       rs.getString(8),
+                       rs.getString(9)));
+            }
+            close();
+            
+        }catch(Exception e){
+        }
+        return list;
+    }
+    
+    
+    
     
     public void like(int userID, String postID){
         String check = "select * from favorites\n"
@@ -467,11 +498,12 @@ public class DAO {
         else
             query = "select count(*) from posts\n"
                     + "where categoryID = ?;";
+       
         int pageCount = 1;
         try{
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
-            if(Character.isDigit(entry.charAt(0))) ps.setString(1,entry);
+            if(!entry.isEmpty() && Character.isDigit(entry.charAt(0))) ps.setString(1,entry);
             rs = ps.executeQuery();
             if(rs.next()){
                 int postCount = rs.getInt(1);
@@ -481,6 +513,7 @@ public class DAO {
                 }
             }
         }catch(Exception e){
+            e.printStackTrace();
         }
         return pageCount;
     }
@@ -518,7 +551,7 @@ public class DAO {
             while (rs.next()) {
                 list.add(new Comment(rs.getInt(1),
                         rs.getString(2),
-                        rs.getString(3),
+                        rs.getTimestamp(3),
                         rs.getString(4),
                         rs.getInt(5),
                         rs.getInt(6)));
@@ -596,39 +629,36 @@ public class DAO {
         }
         return null;
     }
-
+    public Timestamp getTime(){
+        String q = "select ptime from posts where postID = 9";
+        try{
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(q);
+            rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getTimestamp(1);
+            }
+        }catch (Exception e){
+        }
+        return null;
+    }
     public static void main(String[] args) {
         DAO dao = new DAO();
-        System.out.println(dao.getTotalPages(""));
-        System.out.println(dao.getTotalPages("trend"));
-        System.out.println(dao.getTotalPages("liked"));
-        System.out.println(dao.getTotalPages("1"));
-        System.out.println(dao.getTotalPages("2"));
-        System.out.println(dao.getTotalPages("3"));
-//       User user = dao.login("minh", "1234");
-//        System.out.println(user.getUname());
+//        Timestamp timestamp = dao.getTime();
+//        System.out.println("Timestamp: " + timestamp);
 
-//        Comment cmt = new Comment("Barca quá hay",2,3);
-//        dao.insertComment(cmt)
-//          List<Comment> list = dao.getCommentsByPostID("1");
-//          for(Comment c : list){
-//              System.out.println(c.getCcontent());
-//          }
-        //List<Post> list = dao.getAllPosts();
-//        Post pt = dao.getPostByID("7");
-//        pt.setPcontent("modified");
-//        System.out.println("here");
-//        System.out.println(pt.getPtitle());
-//        System.out.println(pt.getPcontent());
-//        System.out.println(pt.getPimage());
-//        pt.setCategoryID(dao.getCategoryIDByName(pt.getCategoryName()));
-//        dao.updatePost(pt.getPostID()+"",pt);
-        
-//        for(Post p : list){
-//            p.setPcontent("hiha");
-//            System.out.println(p.getPcontent());
-//            dao.updatePost(p.getPostID()+"", p);
-//        }
-          
-    }
+        // Convert to java.time.LocalDateTime (Java 8+)
+//        LocalDateTime localDateTime = timestamp.toLocalDateTime();
+//        System.out.println("LocalDateTime: " + localDateTime);
+//        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+//        System.out.println(sdf.format(timestamp));
+//        
+//        Locale vietnam = new Locale.Builder().setLanguage("vi").setRegion("VN").build();
+//        sdf = new SimpleDateFormat("EEEE", vietnam);
+//        System.out.println(sdf.format(timestamp));
+        List<Post> l = dao.get10Posts("tin-duoc-yeu-thich",2);
+        for(Post p:l){
+            System.out.println(p.getPtitle());
+        }
+    } 
 }

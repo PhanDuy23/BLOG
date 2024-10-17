@@ -34,7 +34,6 @@ public class SignUpControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
     }
 
     
@@ -73,10 +72,11 @@ public class SignUpControl extends HttpServlet {
             String name = request.getParameter("name");
             User user = new User(acc,pass,name);
             dao.signup(user);
+            user = dao.getUserByAccount(acc);
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
             session.setMaxInactiveInterval(-1);
-
+            
             response.sendRedirect("paging");
         }
     }

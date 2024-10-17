@@ -5,6 +5,9 @@
 package entity;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 import util.URLSlug;
 
 /**
@@ -16,7 +19,7 @@ public class Post implements Serializable{
     private String ptitle;
     private String pimage;
     private String pcontent;
-    private String ptime;
+    private Timestamp ptime;
     private int pclicks;
     private int plikes;
     private String editorName;
@@ -27,7 +30,7 @@ public class Post implements Serializable{
     public Post() {
     }
     // dung khi lay du lieu
-    public Post(int postID, String ptitle, String pimage, String pcontent, String ptime, int plikes, int pclicks, String editorName, String categoryName) {
+    public Post(int postID, String ptitle, String pimage, String pcontent, Timestamp ptime, int plikes, int pclicks, String editorName, String categoryName) {
         this.postID = postID;
         this.ptitle = ptitle;
         this.pimage = pimage;
@@ -54,6 +57,22 @@ public class Post implements Serializable{
         this.pcontent = content;
         this.categoryID = categoryID;
         
+    }
+    public String getDayOfWeek() {
+        if (this.ptime == null) {
+            return "N/A"; // hoặc một giá trị mặc định khác
+        }
+        Locale vietnam = new Locale.Builder().setLanguage("vi").setRegion("VN").build();
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE", vietnam);
+        return sdf.format(this.ptime);
+    }
+
+    public String getFormattedPtime() {
+        if (this.ptime == null) {
+            return "N/A"; // hoặc một giá trị mặc định khác
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        return sdf.format(ptime);
     }
     public String getCategoryName() {
         return categoryName;
@@ -105,11 +124,11 @@ public class Post implements Serializable{
         this.pcontent = pcontent;
     }
 
-    public String getPtime() {
+    public Timestamp getPtime() {
         return ptime;
     }
 
-    public void setPtime(String ptime) {
+    public void setPtime(Timestamp ptime) {
         this.ptime = ptime;
     }
 

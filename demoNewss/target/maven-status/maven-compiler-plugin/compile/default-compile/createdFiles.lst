@@ -3,10 +3,10 @@ context\DBContext.class
 util\URLSlug.class
 control\HomeControl.class
 dao\DAO.class
+control\LoginControl.class
 entity\Category.class
 entity\User.class
 control\CommentControl.class
-control\CategoryControl.class
 control\PostControl.class
 control\SignUpControl.class
 entity\Comment.class

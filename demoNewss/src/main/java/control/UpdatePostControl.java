@@ -36,55 +36,9 @@ public class UpdatePostControl extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-        response.setCharacterEncoding("UTF-8");      
-        response.setContentType("text/html;charset=UTF-8");
-        String action = request.getParameter("action");
-        DAO dao = new DAO();
-        if(action == null){
-            action = "add";
-        }
-        if(action.equals("add")){
-            List<Category> categories = dao.getAllCategories();
-            request.setAttribute("categories", categories);
-            request.getRequestDispatcher("/updatePost.jsp").forward(request, response);
-        }else if(action.equals("create")){
-            int categoryID = Integer.parseInt(request.getParameter("category"));
-            String title = request.getParameter("title");
-            String image = request.getParameter("image");
-            String content = request.getParameter("content");
-            HttpSession session = request.getSession();
-            User user = (User) session.getAttribute("user");
-            int editorID = user.getUserID();
-            Post post = new Post(title,image,content,categoryID, editorID);
-            dao.addPost(post);
-            response.sendRedirect("home");
-        }else if(action.equals("change")){
-            String pid = request.getParameter("pid");
-            Post post = dao.getPostByID(pid);
-            request.setAttribute("p", post);
-            request.getRequestDispatcher("/updatePost.jsp").forward(request, response);
-        }else if(action.equals("update")){
-            String pid = request.getParameter("pid");
-            // lay thong tin cua bai viet moi
-            int categoryID = Integer.parseInt(request.getParameter("category"));
-            String title = request.getParameter("title");
-            String image = request.getParameter("image");
-            String content = request.getParameter("content");
-            Post post = new Post(title,image,content,categoryID);
-            dao.updatePost(pid,post);
-        }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -117,17 +71,36 @@ public class UpdatePostControl extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");      
+        response.setContentType("text/html;charset=UTF-8");
+        String action = request.getServletPath();
+        DAO dao = new DAO();
+        if(action.equals("/tao-bai")){
+            int categoryID = Integer.parseInt(request.getParameter("category"));
+            String title = request.getParameter("title");
+            String image = request.getParameter("image");
+            String content = request.getParameter("content");
+            HttpSession session = request.getSession();
+            User user = (User) session.getAttribute("user");
+            int editorID = user.getUserID();
+            Post post = new Post(title,image,content,categoryID, editorID);
+            dao.addPost(post);
+            response.sendRedirect("paging");
+        }else if(action.equals("/sua-bai")){
+            String pid = request.getParameter("pid");
+            // lay thong tin cua bai viet moi
+            int categoryID = Integer.parseInt(request.getParameter("category"));
+            String title = request.getParameter("title");
+            String image = request.getParameter("image");
+            String content = request.getParameter("content");
+            Post post = new Post(title,image,content,categoryID);
+            dao.updatePost(pid,post);
+            response.sendRedirect("paging");
+        }
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+    
+   
 
 }
