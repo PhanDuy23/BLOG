@@ -1,16 +1,15 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  *
  * @author Admin
  */
 public class Comment {
+
     private int commentID;
     private String ccontent;
     private Date ctime;
@@ -30,6 +29,22 @@ public class Comment {
     public Comment() {
     }
 
+    public String getDayOfWeek() {
+        if (this.ctime == null) {
+            return "N/A"; // hoặc một giá trị mặc định khác
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE", new Locale("vi", "VN"));
+        return sdf.format(this.ctime);
+    }
+
+    public String getFormattedCtime() {
+        if (this.ctime == null) {
+            return "N/A"; // hoặc một giá trị mặc định khác
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        return sdf.format(ctime);
+    }
+
     public String getUname() {
         return uname;
     }
@@ -37,7 +52,7 @@ public class Comment {
     public void setUname(String uname) {
         this.uname = uname;
     }
-    
+
     public int getCommentID() {
         return commentID;
     }
@@ -85,5 +100,4 @@ public class Comment {
     public void setPostID(int postID) {
         this.postID = postID;
     }
-    
 }

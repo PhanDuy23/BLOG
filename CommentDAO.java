@@ -63,7 +63,11 @@ public class CommentDAO extends DBContext {
         List<Comment> comments = new ArrayList<>();
         
         try{
-            String query = "SELECT  c.ccontent, u.uname, c.ctime, c.caccept, c.postID FROM news.comments c JOIN news.users u ON c.userID = u.userID WHERE c.postID = ? AND c.caccept = 1;";
+             String query = "SELECT c.ccontent, u.uname, c.ctime, c.caccept, c.postID " +
+                       "FROM news.comments c " +
+                       "JOIN news.users u ON c.userID = u.userID " +
+                       "WHERE c.postID = ? AND c.caccept = 1 " +
+                       "ORDER BY c.ctime DESC;"; // Sắp xếp theo thời gian tăng dần
             ps = connection.prepareStatement(query);
             ps.setInt(1, postID);
             ResultSet rs = ps.executeQuery();

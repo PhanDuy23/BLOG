@@ -17,7 +17,7 @@
                     <c:forEach var="comment" items="${comments}">
                         <li>
                             <p><strong>Người dùng : ${comment.uname}</strong></p>
-                            <p>Thời gian: ${comment.ctime}</p>
+                            <p>Thời gian: ${comment.dayOfWeek}, ${comment.formattedCtime}</p>
                             <p>Nội dung: ${comment.ccontent}</p>
                         </li>
                     </c:forEach>
