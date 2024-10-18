@@ -74,6 +74,9 @@ public class Post implements Serializable{
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         return sdf.format(ptime);
     }
+    public String getFirstSentence(){
+        return pcontent.substring(0,pcontent.indexOf("\n"));
+    }
     public String getCategoryName() {
         return categoryName;
     }

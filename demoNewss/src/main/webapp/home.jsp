@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+    <link rel="stylesheet" href="home.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 <!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>-->
@@ -84,6 +84,7 @@
                     </c:if>
                 </div>
             </div>
+            <a href="${pageContext.request.contextPath}/tim-kiem">search</a>
             <input type="text" placeholder="tìm kiếm" style="height: 40px;">
         </div>
 
@@ -96,7 +97,6 @@
             <c:forEach var="o" items="${listC}">
                 <a href="${pageContext.request.contextPath}/paging?mucTin=${o.cslug}&trang=1" >${o.cname}</a>
             </c:forEach>
-            
         </div>
         
         <!--TÊN CHUYÊN MỤC VÀ CÁC BÀI BÁO-->
@@ -110,14 +110,12 @@
                         <a href="${pageContext.request.contextPath}/post/${o.pslug}">
                             <h3>${o.ptitle}</h3>
                         </a>
-                        
-                        <!--<p>${o.pcontent}</p>--> 
-                        
                         <div style = "display: flex; ">
                             <img src="${o.pimage}" alt="ảnh" width="30%">
                             <div style = "display: flex; flex-direction: column">
-                                <h4>${o.editorName}</h4>
-                                <h4>${o.dayOfWeek}, ${o.formattedPtime}</h4>
+<!--                                <h4>${o.editorName}</h4>
+                                <h4>${o.dayOfWeek}, ${o.formattedPtime}</h4>-->
+                                <p>${o.firstSentence}</p>
                                 <c:if test="${entry == 'tin-duoc-yeu-thich'}">
                                     <p>Lượt thích: ${o.plikes}</p>
                                 </c:if>

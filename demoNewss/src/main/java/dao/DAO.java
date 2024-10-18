@@ -350,20 +350,75 @@ public class DAO {
         return user;
     }
     
-    
-    public List<Post> search(String txt){
-        String query = "select p.postID, p.ptitle, p.pimage,p.pcontent,p.ptime,p.plikes,p.pclicks,u.uname,c.cname\n"
-               + "from posts as p, users as u, categories as c\n"
-               + "where p.userID = u.userID\n"
-               + "and p.categoryID = c.categoryID\n"
-               + "and (p.ptitle like ? or p.pcontent like ?);"; 
-               
+    // SEARCH
+    public List<Post> searchNPosts(int postCount, int pageIndex, String txt, String cate, String time){
         List<Post> list = new ArrayList<>();
         try{
             conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setString(1, "%" + txt + "%");
-            ps.setString(2, "%" + txt + "%");
+            String query = "";
+            int offset = (pageIndex-1)*postCount;
+            // tim kiem tat ca chuyen muc va thoi gian
+            if(cate.equals("allCates") && time.equals("allTime")){
+                query = "select p.postID, p.ptitle, p.pimage,p.pcontent,p.ptime,p.plikes,p.pclicks,u.uname,c.cname\n"
+                        + "from posts as p, users as u, categories as c\n"
+                        + "where p.userID = u.userID\n"
+                        + "and p.categoryID = c.categoryID\n"
+                        + "and (p.ptitle like ? or p.pcontent like ?)\n"
+                        + "limit ? offset ?;";
+                ps = conn.prepareStatement(query);
+                
+                ps.setString(1, "%" + txt + "%");
+                ps.setString(2, "%" + txt + "%");
+                ps.setInt(3, postCount);
+                ps.setInt(4, offset);
+            }
+            else if(cate.equals("allCates") && !time.equals("allTime")){
+                query = "select p.postID, p.ptitle, p.pimage,p.pcontent,p.ptime,p.plikes,p.pclicks,u.uname,c.cname\n"
+                        + "from posts as p, users as u, categories as c\n"
+                        + "where p.userID = u.userID\n"
+                        + "and p.categoryID = c.categoryID\n"
+                        + "and p.ptime >= now() - interval 1 " + time + " \n"
+                        + "and (p.ptitle like ? or p.pcontent like ? )\n"
+                        + "limit ? offset ?;";
+                ps = conn.prepareStatement(query);
+                
+                ps.setString(1, "%" + txt + "%");
+                ps.setString(2, "%" + txt + "%");
+                ps.setInt(3, postCount);
+                ps.setInt(4, offset);
+            }
+            else if(!cate.equals("allCates") && time.equals("allTime")){
+                query = "select p.postID, p.ptitle, p.pimage,p.pcontent,p.ptime,p.plikes,p.pclicks,u.uname,c.cname\n"
+                        + "from posts as p, users as u, categories as c\n"
+                        + "where p.userID = u.userID\n"
+                        + "and p.categoryID = c.categoryID\n"
+                        + "and p.categoryID = ?\n"
+                        + "and (p.ptitle like ? or p.pcontent like ?)\n"
+                        + "limit ? offset ?;";
+                ps = conn.prepareStatement(query);
+                ps.setString(1,cate);
+                ps.setString(2, "%" + txt + "%");
+                ps.setString(3, "%" + txt + "%");
+                ps.setInt(4, postCount);
+                ps.setInt(5, offset);
+            }
+            else{
+                query = "select p.postID, p.ptitle, p.pimage,p.pcontent,p.ptime,p.plikes,p.pclicks,u.uname,c.cname\n"
+                        + "from posts as p, users as u, categories as c\n"
+                        + "where p.userID = u.userID\n"
+                        + "and p.categoryID = c.categoryID\n"
+                        + "and p.categoryID = ? \n"
+                        + "and p.ptime >= now() - interval 1 " + time + " \n"
+                        + "and (p.ptitle like ? or p.pcontent like ?)\n"
+                        + "limit ? offset ?;";
+                ps = conn.prepareStatement(query);
+                ps.setString(1,cate);
+                ps.setString(2, "%" + txt + "%");
+                ps.setString(3, "%" + txt + "%");
+                ps.setInt(4, postCount);
+                ps.setInt(5, offset);
+            }
+          
             rs = ps.executeQuery();
             while(rs.next()){
                 list.add(new Post(rs.getInt(1),
@@ -382,38 +437,72 @@ public class DAO {
         }
         return list;
     }
-    public List<Post> searchWithCategory(String txt, String categoryID){
-        String query = "select p.postID, p.ptitle, p.pimage,p.pcontent,p.ptime,p.plikes,p.pclicks,u.uname,c.cname\n"
-               + "from posts as p, users as u, categories as c\n"
-               + "where p.userID = u.userID\n"
-               + "and p.categoryID = c.categoryID\n"
-               + "and (p.ptitle like ? or p.pcontent like ?)\n"
-               + "and p.categoryID = ? ; "; 
-               
-        List<Post> list = new ArrayList<>();
+    public int[] getSearchPages(int postCount, String txt, String cate, String time){
+        int pageCount = 1;
+        int posts = 1;
         try{
             conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setString(1, "%" + txt + "%");
-            ps.setString(2, "%" + txt + "%");
-            ps.setString(3, categoryID);
+            String query = "";
+            
+            // tim kiem tat ca chuyen muc va thoi gian
+            if(cate.equals("allCates") && time.equals("allTime")){
+                query = "select count(*) from posts\n"
+                        + "where ptitle like ? or pcontent like ? ;";
+                ps = conn.prepareStatement(query);
+                ps.setString(1, "%" + txt + "%");
+                ps.setString(2, "%" + txt + "%");
+                
+            }
+            // tim kiem tat ca chuyen muc trong 1 khoang thoi gian
+            else if(cate.equals("allCates") && !time.equals("allTime")){
+                query = "select count(*) from posts\n"
+                        + "where (ptitle like ? or pcontent like ?)\n"
+                        + "and ptime >= now() - interval 1 " + time +";";
+                ps = conn.prepareStatement(query);
+                
+                ps.setString(1, "%" + txt + "%");
+                ps.setString(2, "%" + txt + "%");
+                
+            }
+            // tim kiem 1 chuyen muc trong tat ca thoi gian
+            else if(!cate.equals("allCates") && time.equals("allTime")){
+                query = "select count(*) from posts\n"
+                        + "where (ptitle like ? or pcontent like ? )\n"
+                        + "and categoryID = ?;";
+                ps = conn.prepareStatement(query);
+              
+                ps.setString(1, "%" + txt + "%");
+                ps.setString(2, "%" + txt + "%");
+                ps.setString(3, cate);
+               
+            }
+            // tim kiem 1 chuyen muc trong 1 khoang thoi gian
+            else{
+                query = "select count(*) from posts\n"
+                        + "where (ptitle like ? or pcontent like ? )\n"
+                        + "and ptime >= now() - interval 1 " +time + " \n"
+                        + "and categoryID = ?;";
+                ps = conn.prepareStatement(query);
+              
+                ps.setString(1, "%" + txt + "%");
+                ps.setString(2, "%" + txt + "%");
+                ps.setString(3, cate);
+            }
+          
             rs = ps.executeQuery();
             while(rs.next()){
-                list.add(new Post(rs.getInt(1),
-                       rs.getString(2),
-                       rs.getString(3),
-                       rs.getString(4),
-                       rs.getTimestamp(5),
-                       rs.getInt(6),
-                       rs.getInt(7),
-                       rs.getString(8),
-                       rs.getString(9)));
+                posts = rs.getInt(1);
+                pageCount = posts/postCount;
+                if(posts % postCount != 0){
+                    pageCount++;
+                }
             }
             close();
             
         }catch(Exception e){
+            e.printStackTrace();
         }
-        return list;
+        return new int[]{pageCount,posts};
     }
     
     
@@ -656,9 +745,16 @@ public class DAO {
 //        Locale vietnam = new Locale.Builder().setLanguage("vi").setRegion("VN").build();
 //        sdf = new SimpleDateFormat("EEEE", vietnam);
 //        System.out.println(sdf.format(timestamp));
-        List<Post> l = dao.get10Posts("tin-duoc-yeu-thich",2);
-        for(Post p:l){
-            System.out.println(p.getPtitle());
-        }
+//        List<Post> l = dao.get10Posts("tin-duoc-yeu-thich",2);
+//        for(Post p:l){
+//            System.out.println(p.getPtitle());
+//        }
+//          List<Post> l = dao.searchNPosts(7,1,"t","4","week");
+//          
+//          for(Post p:l){
+//              System.out.println(p.getPtitle());
+//          }
+//          System.out.println(dao.getSearchPages(7, "t", "4", "week"));
+           
     } 
 }

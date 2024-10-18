@@ -4,7 +4,7 @@
  */
 package control;
 
-import dao.DAO;
+import dao.*;
 import entity.Comment;
 import entity.User;
 import java.io.IOException;

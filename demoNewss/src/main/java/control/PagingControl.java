@@ -75,6 +75,7 @@ public class PagingControl extends HttpServlet {
                 for(Category c : l){
                     if(c.getCslug().equals(entry)){
                         entry = c.getCategoryID()+"";
+                        request.setAttribute("entryName",c.getCname());
                         break;
                     }
                 }

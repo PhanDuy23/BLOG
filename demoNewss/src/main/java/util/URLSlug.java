@@ -16,7 +16,7 @@ public class URLSlug {
         String normalized = Normalizer.normalize(title, Normalizer.Form.NFKD)// decomposed accented characters into base characters and diacritical marks
                                       .replaceAll("[^\\p{ASCII}]", "") // non-ASCII character to ""
                                       .toLowerCase();
-        System.out.println(normalized);
+        //System.out.println(normalized);
         // Replace spaces with hyphens and remove any non-alphanumeric characters
         String slug = normalized.replaceAll("[\\s+]", "-")
                                 .replaceAll("[^a-z0-9-]", "");
