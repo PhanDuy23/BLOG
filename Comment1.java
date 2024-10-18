@@ -19,42 +19,81 @@ public class Comment1 extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         HttpSession ss = request.getSession(false);
         if (ss == null || ss.getAttribute("userID") == null) {
-            // Nếu session không tồn tại hoặc userID không có trong session, chuyển hướng đến trang đăng nhập
             response.sendRedirect("login.jsp");
             return;
         }
 
-        // Lấy dữ liệu từ session và request
         int userID = (int) ss.getAttribute("userID");
-        String content = request.getParameter("comment");
+        String action = request.getParameter("action");
         String postIDStr = request.getParameter("postID");
 
-        // In ra log để kiểm tra giá trị nhận được
-        System.out.println("Bình luận: " + content);
-        System.out.println("Post ID: " + postIDStr);
-
-        if (content == null || content.trim().isEmpty()) {
-            response.sendRedirect("article.jsp?error=emptyComment");
+        if (postIDStr == null || postIDStr.isEmpty()) {
+            response.sendRedirect("article.jsp?error=invalidPost");
             return;
         }
 
         int postID = Integer.parseInt(postIDStr);
-        Date date = new Date();
-        Comment cmt = new Comment(content, date, 1, userID, postID);
-
-        // Tạo đối tượng DAO và thêm bình luận
         CommentDAO commentDAO = new CommentDAO();
-        boolean result = commentDAO.insertComment(cmt);
 
-        if (result) {
-            System.out.println("Bình luận đã được thêm thành công!");
+        if ("edit".equalsIgnoreCase(action)) {
+            // Xử lý sửa bình luận
+            String commentIDStr = request.getParameter("commentID");
+            String newContent = request.getParameter("newContent");
+            
+            if (commentIDStr == null || newContent == null || newContent.trim().isEmpty()) {
+                response.sendRedirect("article.jsp?postID=" + postID + "&error=invalidEdit");
+                return;
+            }
+
+            int commentID = Integer.parseInt(commentIDStr);
+            Comment comment = new Comment(newContent, new Date(), 1, userID, postID);
+            comment.setCommentID(commentID);
+            boolean updated = commentDAO.updateComment(comment);
+
+            if (updated) {
+                System.out.println("Bình luận đã được sửa thành công!");
+            } else {
+                System.out.println("Sửa bình luận thất bại!");
+            }
+        } else if ("delete".equalsIgnoreCase(action)) {
+            // Xử lý xóa bình luận
+            String commentIDStr = request.getParameter("commentID");
+
+            if (commentIDStr == null || commentIDStr.isEmpty()) {
+                response.sendRedirect("article.jsp?postID=" + postID + "&error=invalidDelete");
+                return;
+            }
+
+            int commentID = Integer.parseInt(commentIDStr);
+            boolean deleted = commentDAO.deleteComment(commentID);
+
+            if (deleted) {
+                System.out.println("Bình luận đã được xóa thành công!");
+            } else {
+                System.out.println("Xóa bình luận thất bại!");
+            }
         } else {
-            System.out.println("Thêm bình luận thất bại!");
+            // Xử lý thêm bình luận
+            String content = request.getParameter("comment");
+
+            if (content == null || content.trim().isEmpty()) {
+                response.sendRedirect("article.jsp?postID=" + postID + "&error=emptyComment");
+                return;
+            }
+
+            Date date = new Date();
+            Comment cmt = new Comment(content, date, 1, userID, postID);
+            boolean result = commentDAO.insertComment(cmt);
+
+            if (result) {
+                System.out.println("Bình luận đã được thêm thành công!");
+            } else {
+                System.out.println("Thêm bình luận thất bại!");
+            }
         }
 
         // Lấy lại danh sách bình luận để hiển thị
         List<Comment> list = commentDAO.getCommentsByPostID1(postID);
-
         request.setAttribute("comments", list);
         request.getRequestDispatcher("article.jsp").forward(request, response);
     }
