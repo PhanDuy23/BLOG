@@ -24,7 +24,7 @@
                                     <input type="hidden" name="action" value="edit"/>
                                     <input type="hidden" name="commentID" value="${comment.commentID}"/>
                                     <input type="hidden" name="postID" value="${comment.postID}"/>
-                                    <textarea name="newContent"></textarea>
+                                    <textarea name="newContent">${comment.ccontent}</textarea>
                                     <button type="submit">Sửa</button>
                                 </form>
 
