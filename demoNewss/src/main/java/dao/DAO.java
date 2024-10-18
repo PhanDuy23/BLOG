@@ -97,6 +97,102 @@ public class DAO {
         }
         return null;
     }
+    public Post getPostByID(String id){
+       String query = "select p.postID, p.ptitle, p.pimage,p.pcontent,p.ptime,p.plikes,p.pclicks,u.uname,c.cname\n"
+               + "FROM posts as p, users as u, categories as c\n"
+               + "WHERE p.userID = u.userID\n"
+               + "AND p.categoryID = c.categoryID\n"
+               + "AND p.postID = ? ;";
+        try{
+           conn = new DBContext().getConnection();
+           ps = conn.prepareStatement(query);
+           ps.setString(1, id);
+           rs = ps.executeQuery();
+           Post post = null;
+           if(rs.next()){
+               post = new Post(rs.getInt(1),
+                       rs.getString(2),
+                       rs.getString(3),
+                       rs.getString(4),
+                       rs.getTimestamp(5),
+                       rs.getInt(6),
+                       rs.getInt(7),
+                       rs.getString(8),
+                       rs.getString(9));
+           }
+           close();
+           return post;
+       }catch(Exception e){
+           e.printStackTrace();
+       }
+       return null;
+    }
+    public List<Post> getPostsByUserID (int userID){
+        List<Post> list = new ArrayList<>();
+        String query = "select p.postID, p.ptitle, p.pimage,p.pcontent,p.ptime,p.plikes,p.pclicks,u.uname,c.cname\n"
+                + "FROM posts as p, users as u, categories as c\n"
+                + "WHERE p.userID = u.userID\n"
+                + "AND p.categoryID = c.categoryID \n"
+                + "AND p.userID = ? \n"
+                + "order by p.ptime DESC;";
+        try{
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, userID);
+            rs = ps.executeQuery();
+     
+            while(rs.next()){
+               list.add(new Post(rs.getInt(1),
+                       rs.getString(2),
+                       rs.getString(3),
+                       rs.getString(4),
+                       rs.getTimestamp(5),
+                       rs.getInt(6),
+                       rs.getInt(7),
+                       rs.getString(8),
+                       rs.getString(9)));
+            }
+           close();
+           
+       }catch(Exception e){
+           e.printStackTrace();
+       }
+       return list;
+    }
+    public List<Post> getRelatedPosts(String postID, int categoryID){
+        List<Post> list = new ArrayList<>();
+        String query = "select p.postID, p.ptitle, p.pimage,p.pcontent,p.ptime,p.plikes,p.pclicks,u.uname,c.cname\n"
+                + "FROM posts as p, users as u, categories as c\n"
+                + "WHERE p.userID = u.userID\n"
+                + "AND p.categoryID = c.categoryID \n"
+                + "AND p.postID != ? \n"
+                + "AND p.categoryID = ? \n"
+                + "order by p.ptime DESC;";
+        try{
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1,postID);
+            ps.setInt(2, categoryID);
+            rs = ps.executeQuery();
+            while(rs.next()){
+                list.add(new Post(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getTimestamp(5),
+                        rs.getInt(6),
+                        rs.getInt(7),
+                        rs.getString(8),
+                        rs.getString(9)));
+            }
+            close();
+            
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return list;
+    }
+    
     public List<Post> get10Posts(String entry, int pageIndex){
         List<Post> list = new ArrayList<>();
         // phan trang home
@@ -165,35 +261,7 @@ public class DAO {
         }
         return null;
     }
-    public Post getPostByID(String id){
-       String query = "select p.postID, p.ptitle, p.pimage,p.pcontent,p.ptime,p.plikes,p.pclicks,u.uname,c.cname\n"
-               + "FROM posts as p, users as u, categories as c\n"
-               + "WHERE p.userID = u.userID\n"
-               + "AND p.categoryID = c.categoryID\n"
-               + "AND p.postID = ? ;";
-       try{
-           conn = new DBContext().getConnection();
-           ps = conn.prepareStatement(query);
-           ps.setString(1, id);
-           rs = ps.executeQuery();
-           Post post = null;
-           if(rs.next()){
-               post = new Post(rs.getInt(1),
-                       rs.getString(2),
-                       rs.getString(3),
-                       rs.getString(4),
-                       rs.getTimestamp(5),
-                       rs.getInt(6),
-                       rs.getInt(7),
-                       rs.getString(8),
-                       rs.getString(9));
-           }
-           close();
-           return post;
-       }catch(Exception e){
-       }
-       return null;
-    }
+    
     public List<Post> getLikedPosts(int userID){
         String query = "select p.postID, p.ptitle, p.pimage,p.pcontent,p.ptime,p.plikes,p.pclicks,u.uname,c.cname\n"
                 + "from posts as p, users as u, categories as c, favorites as f\n"
@@ -271,6 +339,8 @@ public class DAO {
         } catch (Exception e) {
         }
     }
+    
+    // CATEGORY
     public List<Category> getAllCategories(){
         List<Category> list = new ArrayList<>();
         String query = "select * from categories";
@@ -651,7 +721,31 @@ public class DAO {
         }
         return list;
     }
-
+    public List<Comment> getCommentsByUserID(int userID){
+        String query = "SELECT  c.commentID,c.ccontent,c.ctime, u.uname, u.userID, c.postID \n"
+                + "FROM news.comments c JOIN news.users u \n"
+                + "ON c.userID = u.userID \n"
+                + "WHERE c.userID = ? ;";
+        List<Comment> list = new ArrayList<>();
+        try{
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, userID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new Comment(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getTimestamp(3),
+                        rs.getString(4),
+                        rs.getInt(5),
+                        rs.getInt(6)));
+            }
+            close();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return list;
+    }
     
     
     //login, signup
@@ -755,6 +849,12 @@ public class DAO {
 //              System.out.println(p.getPtitle());
 //          }
 //          System.out.println(dao.getSearchPages(7, "t", "4", "week"));
-           
+        
+//        List<Comment> l = dao.getCommentsByUserID(2);
+//        for(Comment x : l){
+//            System.out.println(x.getCcontent());
+//        }
+           List<Post> l = dao.getPostsByUserID(8);
+           System.out.println(l.size());
     } 
 }

@@ -25,18 +25,26 @@ public class PostControl extends HttpServlet{
         if(action == null){
             String slug = request.getPathInfo();
             if(slug != null && slug.length()>1){
-                String id = slug.substring(slug.lastIndexOf("-")+1);
+                String postId = slug.substring(slug.lastIndexOf("-")+1);
                 DAO dao = new DAO();
-                dao.click(id);
-                Post post = dao.getPostByID(id);
-                List<Category> categories = dao.getAllCategories();
+                dao.click(postId);
+                Post post = dao.getPostByID(postId);
+                
 
                 if(post != null){
+                    // chuyen "\n" thanh <br> de hien thi tren html
                     post.setPcontent(post.getPcontent().replace("\n", "<br>"));
-                    List<Comment> comments = dao.getCommentsByPostID(id);
-                    request.setAttribute("comments", comments);
-                    request.setAttribute("listC", categories);
                     request.setAttribute("p", post);
+                    
+                    List<Comment> comments = dao.getCommentsByPostID(postId);
+                    request.setAttribute("comments", comments);
+                    
+                    List<Post> relate = dao.getRelatedPosts(postId, dao.getCategoryIDByName(post.getCategoryName()));
+                    request.setAttribute("relatedPosts",relate);
+                    
+                    List<Category> categories = dao.getAllCategories();
+                    request.setAttribute("listC", categories);
+                    
                     request.getRequestDispatcher("/post.jsp").forward(request,response);
                 }
             }

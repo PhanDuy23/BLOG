@@ -3,6 +3,7 @@ context\DBContext.class
 util\URLSlug.class
 control\HomeControl.class
 dao\DAO.class
+control\AccountControl.class
 control\LoginControl.class
 dao\Test.class
 entity\Category.class

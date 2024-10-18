@@ -65,21 +65,21 @@
                         <div style="display: flex; flex-direction: column; justify-content: space-around;">
                             <div
                                 style="background-color: #C92127; color: rgb(22, 5, 5); margin: 10px; border-radius: 5px; text-align: center; padding: 10px;">
-                                <a href="dang-nhap">Đăng nhập</a></div>
+                                <a href="${pageContext.request.contextPath}/dang-nhap">Đăng nhập</a></div>
                             <div
                                 style="background-color: rgb(189, 20, 20);margin: 10px; border: 1px solid #ddd6d7;padding: 10px; border-radius: 5px; text-align: center;">
-                                <a href="dang-ki">Đăng kí</a></div>
+                                <a href="${pageContext.request.contextPath}/dang-ki">Đăng kí</a></div>
                         </div>
                     </c:if>
                     <c:if test="${sessionScope.user != null}">
                         <div class="loggedIn" style="display: flex; flex-direction: column; background-color: rgb(118, 112, 112);">
-                            <a href="">Thông tin tài khoản</a>
-                            <a href="">Hoạt động bình luận</a>
+                            <a href="${pageContext.request.contextPath}/tai-khoan?muc=thong-tin">Thông tin tài khoản</a>
+                            <a href="${pageContext.request.contextPath}/tai-khoan?muc=binh-luan">Hoạt động bình luận</a>
                             <c:if test="${sessionScope.user.ueditor == true}">
-                                <a href="${pageContext.request.contextPath}/tao-bai">Bài viết của bạn</a>
+                                <a href="${pageContext.request.contextPath}/tai-khoan?muc=bai-viet">Bài viết của bạn</a>
                             </c:if>
-                            <a href="">Tin yêu thích</a>
-                            <a href="">Đăng xuất</a>
+                            <a href="${pageContext.request.contextPath}/tai-khoan?muc=yeu-thich">Tin yêu thích</a>
+                            <a href="${pageContext.request.contextPath}/dang-xuat">Đăng xuất</a>
                         </div>
                     </c:if>
                 </div>

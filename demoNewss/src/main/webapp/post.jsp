@@ -64,10 +64,10 @@
                         <div style="display: flex; flex-direction: column; justify-content: space-around;">
                             <div
                                 style="background-color: #C92127; color: rgb(22, 5, 5); margin: 10px; border-radius: 5px; text-align: center; padding: 10px;">
-                                <a href="dang-nhap">Đăng nhập</a></div>
+                                <a href="${pageContext.request.contextPath}/dang-nhap">Đăng nhập</a></div>
                             <div
                                 style="background-color: rgb(189, 20, 20);margin: 10px; border: 1px solid #ddd6d7;padding: 10px; border-radius: 5px; text-align: center;">
-                                <a href="dang-ki">Đăng kí</a></div>
+                                <a href="${pageContext.request.contextPath}/dang-ki">Đăng kí</a></div>
                         </div>
                     </c:if>
                     <c:if test="${sessionScope.user != null}">
@@ -78,7 +78,7 @@
                                 <a href="${pageContext.request.contextPath}/tao-bai">Bài viết của bạn</a>
                             </c:if>
                             <a href="">Tin yêu thích</a>
-                            <a href="">Đăng xuất</a>
+                            <a href="${pageContext.request.contextPath}/dang-xuat">Đăng xuất</a>
                         </div>
                     </c:if>
                 </div>
@@ -131,8 +131,29 @@
                 </form>
             </div>
         </div>
-
     </div>
+                    
+        <!--CAC TIN LIEN QUAN-->
+        <div class="newsContainer1" style="display: flex; flex-direction: column; width: 70%; ">
+            <h3>${p.categoryName}</h3>
+                <c:forEach var="o" items="${relatedPosts}">
+                    <div style="display: flex; flex-direction: column; border: 1px solid black">
+                        <a href="${pageContext.request.contextPath}/post/${o.pslug}">
+                            <h3>${o.ptitle}</h3>
+                        </a>
+                        <div style = "display: flex; ">
+                            <img src="${o.pimage}" alt="ảnh" width="30%">
+                            <div style = "display: flex; flex-direction: column">
+<!--                                <h4>${o.editorName}</h4>
+                                <h4>${o.dayOfWeek}, ${o.formattedPtime}</h4>-->
+                                <p>${o.firstSentence}</p>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </c:forEach>
+        </div> 
+                
     <div class="footer">
         <h1>chân</h1>
     </div>
