@@ -792,13 +792,13 @@ public class DAO {
     }
     // Xóa bình luận trong cơ sở dữ liệu
 
-    public boolean deleteComment(int commentID) {
+    public boolean deleteComment(String commentID) {
          
         try {
             String query = "DELETE FROM news.comments WHERE commentID = ?";
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
-            ps.setInt(1, commentID);
+            ps.setString(1, commentID);
 
             int rowsDeleted = ps.executeUpdate();
             return rowsDeleted > 0; // Trả về true nếu xóa thành công

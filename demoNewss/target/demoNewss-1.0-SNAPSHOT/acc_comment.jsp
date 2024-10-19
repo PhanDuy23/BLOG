@@ -44,7 +44,7 @@
                            <a href="${pageContext.request.contextPath}/binh-luan?cid=${o.commentID}&pslug=${o.post.pslug}">Sửa</a>
                        </button>
                        <button>
-                        xóa
+                           <a href="${pageContext.request.contextPath}/binh-luan?action=delete&cid=${o.commentID}">Xoá</a>
                        </button>
                       </div>
                     </div>

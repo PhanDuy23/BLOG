@@ -67,18 +67,29 @@ public class CommentControl extends HttpServlet {
 
     
     @Override
-    // gọi đến trang sửa bình luận
+    // gọi đến trang sửa và xoá bình luận
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        HttpSession ss = request.getSession();
+        String action =  request.getParameter("action");
+        if(action == null){
+            action = "update";
+        }
         DAO dao = new DAO();
-        String pslug = request.getParameter("pslug");
-        String cid = request.getParameter("cid");
-        ss.setAttribute("updateComment", true);
-        ss.setAttribute("Comment", dao.getCommentByID(cid));
+        if(action.equals("update")){
+            HttpSession ss = request.getSession();
+            String pslug = request.getParameter("pslug");
+            String cid = request.getParameter("cid");
+            ss.setAttribute("updateComment", true);
+            ss.setAttribute("Comment", dao.getCommentByID(cid));
+            request.getRequestDispatcher("post/"+pslug).forward(request, response);
+        }
+        else {
+            String cid = request.getParameter("cid");
+            dao.deleteComment(cid);
+            response.sendRedirect("tai-khoan?muc=binh-luan");
+        }
         
-        request.getRequestDispatcher("post/"+pslug).forward(request, response);
     }
 
     
