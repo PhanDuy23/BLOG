@@ -65,43 +65,82 @@ public class CommentControl extends HttpServlet {
         response.sendRedirect(url);
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    
     @Override
+    // gọi đến trang sửa bình luận
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        response.setContentType("text/html;charset=UTF-8");
+        HttpSession ss = request.getSession();
+        DAO dao = new DAO();
+        String pslug = request.getParameter("pslug");
+        String cid = request.getParameter("cid");
+        ss.setAttribute("updateComment", true);
+        ss.setAttribute("Comment", dao.getCommentByID(cid));
+        
+        request.getRequestDispatcher("post/"+pslug).forward(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    
     @Override
+    // đăng và cập nhật bình luận
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        String action = request.getParameter("action");
+        if(action == null){
+            action = "add";
+        }
+        DAO dao = new DAO();
+        if(action.equals("add")){
+            // lấy user từ session
+            HttpSession session = request.getSession();
+            User user = (User) session.getAttribute("user");
+            if (user == null) {
+                // Nếu user không có trong session, chuyển hướng đến trang đăng nhập
+                response.sendRedirect("login.jsp");
+                return;
+            }
+
+            // Lấy dữ liệu từ và request
+
+            String content = request.getParameter("comment");
+            int postID = Integer.parseInt(request.getParameter("postID"));
+
+            // In ra log để kiểm tra giá trị nhận được
+            System.out.println("Bình luận: " + content);
+            System.out.println("Post ID: " + postID);
+
+            Comment cmt = new Comment(content,user.getUserID(), postID);
+
+            // Tạo đối tượng DAO và thêm bình luận
+            
+            boolean result = dao.insertComment(cmt);
+
+            String url = "post/" + dao.getPostByID(postID+"").getPslug();
+            response.sendRedirect(url);
+        }
+        else if (action.equals("update")){
+            HttpSession ss = request.getSession();
+            Comment cmt = (Comment)ss.getAttribute("Comment");
+            ss.removeAttribute("Comment");
+            ss.removeAttribute("updateComment");
+            
+            cmt.setCcontent(request.getParameter("comment"));
+            dao.updateComment(cmt);
+            
+            String pslug = dao.getPostByID(request.getParameter("postID")).getPslug();
+            response.sendRedirect("post/"+pslug);
+        }
+        
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
+   
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
+    }
 
 }

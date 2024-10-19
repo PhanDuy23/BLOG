@@ -4,6 +4,7 @@
  */
 package entity;
 
+import dao.DAO;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -19,7 +20,8 @@ public class Comment implements Serializable{
     private String ccontent, userName;
     private int userID, postID;
     private Timestamp ctime;
-
+    
+    // khi lấy bình luận từ csdl
     public Comment(int commentID, String ccontent, Timestamp ctime, String userName, int userID, int postID) {
         this.commentID = commentID;
         this.ccontent = ccontent;
@@ -28,7 +30,7 @@ public class Comment implements Serializable{
         this.userID = userID;
         this.postID = postID;
     }
-
+    // khi đăng bình luận
     public Comment(String ccontent, int userID, int postID) {
         this.ccontent = ccontent;
         this.userID = userID;
@@ -50,6 +52,15 @@ public class Comment implements Serializable{
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         return sdf.format(ctime);
     }
+
+    public Post getPost() {
+        DAO dao = new DAO();
+        Post post = dao.getPostByID(postID+"");
+        return post;
+    }
+
+    
+    
     public int getCommentID() {
         return commentID;
     }

@@ -746,8 +746,68 @@ public class DAO {
         }
         return list;
     }
+    public Comment getCommentByID(String cid){
+        Comment res = null;
+        String query = "SELECT  c.commentID,c.ccontent,c.ctime, u.uname, u.userID, c.postID \n"
+                + "FROM news.comments c JOIN news.users u \n"
+                + "ON c.userID = u.userID \n"
+                + "WHERE c.commentID = ? ;";
     
+        try{
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, cid);
+            rs = ps.executeQuery();
+            if(rs.next()){
+                res = new Comment(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getTimestamp(3),
+                        rs.getString(4),
+                        rs.getInt(5),
+                        rs.getInt(6));
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return res;
+    }
     
+    // Sửa bình luận trong cơ sở dữ liệu
+    public boolean updateComment(Comment comment) {
+        
+        try {
+            String query = "UPDATE news.comments SET ccontent = ?, ctime = now() WHERE commentID = ?";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, comment.getCcontent());
+            ps.setInt(2, comment.getCommentID());
+
+            int rowsUpdated = ps.executeUpdate();
+            return rowsUpdated > 0; // Trả về true nếu cập nhật thành công
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    // Xóa bình luận trong cơ sở dữ liệu
+
+    public boolean deleteComment(int commentID) {
+         
+        try {
+            String query = "DELETE FROM news.comments WHERE commentID = ?";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, commentID);
+
+            int rowsDeleted = ps.executeUpdate();
+            return rowsDeleted > 0; // Trả về true nếu xóa thành công
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
     //login, signup
     public User login(String acc, String pass){
         String query = "select * from users \n"
@@ -854,7 +914,7 @@ public class DAO {
 //        for(Comment x : l){
 //            System.out.println(x.getCcontent());
 //        }
-           List<Post> l = dao.getPostsByUserID(8);
-           System.out.println(l.size());
+           Comment cmt = dao.getCommentByID("1");
+           System.out.println(cmt.getCcontent());
     } 
 }

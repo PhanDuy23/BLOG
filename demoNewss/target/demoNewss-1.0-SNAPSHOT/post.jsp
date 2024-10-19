@@ -72,12 +72,12 @@
                     </c:if>
                     <c:if test="${sessionScope.user != null}">
                         <div class="loggedIn" style="display: flex; flex-direction: column; background-color: rgb(118, 112, 112);">
-                            <a href="">Thông tin tài khoản</a>
-                            <a href="">Hoạt động bình luận</a>
+                            <a href="${pageContext.request.contextPath}/tai-khoan?muc=thong-tin">Thông tin tài khoản</a>
+                            <a href="${pageContext.request.contextPath}/tai-khoan?muc=binh-luan">Hoạt động bình luận</a>
                             <c:if test="${sessionScope.user.ueditor == true}">
-                                <a href="${pageContext.request.contextPath}/tao-bai">Bài viết của bạn</a>
+                                <a href="${pageContext.request.contextPath}/tai-khoan?muc=bai-viet">Bài viết của bạn</a>
                             </c:if>
-                            <a href="">Tin yêu thích</a>
+                            <a href="${pageContext.request.contextPath}/tai-khoan?muc=yeu-thich">Tin yêu thích</a>
                             <a href="${pageContext.request.contextPath}/dang-xuat">Đăng xuất</a>
                         </div>
                     </c:if>
@@ -115,20 +115,52 @@
             <button id="like" style="background-color:white;">emoji</button>
             <p>Bình luận: </p>
             
-            <c:forEach var="o" items="${comments}">
-                <div style=" border: 1px solid black"> 
-                    <a href="#">${o.userName}</a>
-                    <p>${o.dayOfWeek}, ${o.formattedCtime}</p>
-                    <p>${o.ccontent}</p>
-                </div>
-            </c:forEach>
+            <!--Khong update comment-->
+            <c:if test="${sessionScope.updateComment = null}">
+                <c:forEach var="o" items="${comments}">
+                    <div style=" border: 1px solid black"> 
+                        <a href="#">${o.userName}</a>
+                        <p>${o.dayOfWeek}, ${o.formattedCtime}</p>
+                        <p>${o.ccontent}</p>
+                    </div>
+                </c:forEach>
+            </c:if>
+            
+            <!--Khi update comment-->
+            <c:if test="${sessionScope.updateComment = true}">
+                <c:forEach var="o" items="${comments}">
+                    <div style=" border: 1px solid black"> 
+                        <c:if test="${o.commentID != Comment.commentID}">
+                            <a href="#">${o.userName}</a>
+                            <p>${o.dayOfWeek}, ${o.formattedCtime}</p>
+                            <p>${o.ccontent}</p>
+                        </c:if>
+                    </div>
+                </c:forEach>
+            </c:if>
+                
             <div>
-                <form action="${pageContext.request.contextPath}/binh-luan" method="post">
-                    <label for="comment">Bình luận của bạn</label>
-                    <textarea name="comment" id="comment" placeholder="bình luận" rows="10" cols="50"></textarea>
-                    <input type="hidden" name="postID" value="${p.postID}">
-                    <button type="submit">Gửi</button>
-                </form>
+                <!--Khi khong sua comment-->
+                <c:if test="${sessionScope.updateComment = null}">
+                    <form action="${pageContext.request.contextPath}/binh-luan" method="post">
+                        <label for="comment">Bình luận của bạn</label>
+                        <textarea name="comment" id="comment" placeholder="bình luận" rows="10" cols="50"></textarea>
+                        <input type="hidden" name="postID" value="${p.postID}">
+                        <button type="submit">Gửi</button>
+                    </form>
+                </c:if>
+                
+                <!--KHI SUA COMMENT-->
+                <c:if test="${sessionScope.updateComment = true}">
+                    <form action="${pageContext.request.contextPath}/binh-luan" method="post">
+                        <label for="comment">Bình luận của bạn</label>
+                        <textarea name="comment" id="comment" placeholder="bình luận" rows="10" cols="50" required>${sessionScope.Comment.ccontent}</textarea>
+                        <input type="hidden" name="postID" value="${p.postID}">
+                        <input type="hidden" name="action" value="update">
+                        <button type="submit">Gửi</button>
+                    </form>
+                </c:if>
+                
             </div>
         </div>
     </div>

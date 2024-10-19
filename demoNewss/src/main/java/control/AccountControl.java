@@ -35,18 +35,13 @@ public class AccountControl extends HttpServlet {
         User user = (User)session.getAttribute("user");
         DAO dao = new DAO();
         if(muc.equals("thong-tin")){
-            request.getRequestDispatcher("").forward(request,response);
+            request.getRequestDispatcher("acc_info.jsp").forward(request,response);
         }
         else if(muc.equals("binh-luan")){
             List<Comment> comments = dao.getCommentsByUserID(user.getUserID());
-            request.setAttribute("comments", comments);
             
-            List<String> slugs = new ArrayList<>();
-            for(Comment cmt : comments){
-                slugs.add(dao.getPostByID(cmt.getPostID()+"").getPslug());
-            }
-            request.setAttribute("slugs", slugs);
-            request.getRequestDispatcher("").forward(request,response);
+            request.setAttribute("comments", comments);
+            request.getRequestDispatcher("acc_comment.jsp").forward(request,response);
         }
         else if(muc.equals("yeu-thich")){
             List<Post> likedPosts = dao.getLikedPosts(user.getUserID());
