@@ -46,12 +46,12 @@ public class AccountControl extends HttpServlet {
         else if(muc.equals("yeu-thich")){
             List<Post> likedPosts = dao.getLikedPosts(user.getUserID());
             request.setAttribute("likedPosts", likedPosts);
-            request.getRequestDispatcher("").forward(request,response);
+            request.getRequestDispatcher("acc_likedPosts.jsp").forward(request,response);
         }
         else if(muc.equals("bai-viet")){
             List<Post> posts = dao.getPostsByUserID(user.getUserID());
             request.setAttribute("posts", posts);
-            request.getRequestDispatcher("").forward(request,response);
+            request.getRequestDispatcher("acc_posts.jsp").forward(request,response);
         }
     }
 

@@ -215,19 +215,20 @@ public class DAO {
                 + "from posts as p, users as u, categories as c\n"
                 + "where p.userID = u.userID\n"
                 + "and p.categoryID = c.categoryID\n"
-                + "order by p.plikes desc\n"
+                + "order by p.plikes desc, p.ptime desc \n"
                 + "limit 10 offset ?;";
         // phan trang theo muc tin xu huong
         String query4 = "select p.postID, p.ptitle, p.pimage,p.pcontent,p.ptime,p.plikes,p.pclicks,u.uname,c.cname\n"
                 + "from posts as p, users as u, categories as c\n"
                 + "where p.userID = u.userID\n"
                 + "and p.categoryID = c.categoryID\n"
-                + "and ptime >= now() - interval 2 week\n"
-                + "order by p.pclicks desc\n"
+                + "and p.ptime >= now() - interval 2 week\n"
+                + "order by p.pclicks desc, p.ptime desc \n"
                 + "limit 10 offset ?;";
         try{
             conn = new DBContext().getConnection();
             int offset = (pageIndex-1)*10;
+            
             if(entry.equals("")){
                 ps = conn.prepareStatement(query1);
                 ps.setInt(1,offset);
@@ -311,16 +312,16 @@ public class DAO {
     }
     public void updatePost(String postID, Post post){
         String query = "update posts\n" +
-                "set ptitle = ?, pimage = ?, pcontent = ?, categoryID = ? \n" +
+                "set ptitle = ?, pimage = ?, pcontent = ?, categoryID = ?, ptime = now() \n" +
                 "where postID = ? ;"; 
         try{
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
-            DAO dao = new DAO();
+            
             ps.setString(1, post.getPtitle());
             ps.setString(2, post.getPimage());
             ps.setString(3, post.getPcontent());
-            ps.setInt(4, dao.getCategoryIDByName(post.getCategoryName()));
+            ps.setInt(4, post.getCategoryID());
             ps.setString(5, postID);
             ps.executeUpdate();
             close();
@@ -396,29 +397,7 @@ public class DAO {
         }
         return null;
     }
-    // USERS
-    public User getUserByAccount(String acc){
-        String query = "SELECT * FROM users\n"
-                + "where uaccount = ? ;";
-        User user = null;
-        try{
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setString(1, acc);
-            rs = ps.executeQuery();
-            if(rs.next()){
-                user = new User(rs.getInt(1),
-                        rs.getString(2),
-                        rs.getString(3),
-                        rs.getString(4),
-                        rs.getBoolean(5));
-            }
-            close();
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        return user;
-    }
+    
     
     // SEARCH
     public List<Post> searchNPosts(int postCount, int pageIndex, String txt, String cate, String time){
@@ -433,7 +412,8 @@ public class DAO {
                         + "from posts as p, users as u, categories as c\n"
                         + "where p.userID = u.userID\n"
                         + "and p.categoryID = c.categoryID\n"
-                        + "and (p.ptitle like ? or p.pcontent like ?)\n"
+                        + "and (p.ptitle collate utf8mb4_0900_as_ci like ? or p.pcontent collate utf8mb4_0900_as_ci like ?)\n"
+                        + "order by p.ptime desc \n"
                         + "limit ? offset ?;";
                 ps = conn.prepareStatement(query);
                 
@@ -448,7 +428,8 @@ public class DAO {
                         + "where p.userID = u.userID\n"
                         + "and p.categoryID = c.categoryID\n"
                         + "and p.ptime >= now() - interval 1 " + time + " \n"
-                        + "and (p.ptitle like ? or p.pcontent like ? )\n"
+                        + "and (p.ptitle collate utf8mb4_0900_as_ci like ? or p.pcontent collate utf8mb4_0900_as_ci like ? )\n"
+                        + "order by p.ptime desc \n"
                         + "limit ? offset ?;";
                 ps = conn.prepareStatement(query);
                 
@@ -463,7 +444,8 @@ public class DAO {
                         + "where p.userID = u.userID\n"
                         + "and p.categoryID = c.categoryID\n"
                         + "and p.categoryID = ?\n"
-                        + "and (p.ptitle like ? or p.pcontent like ?)\n"
+                        + "and (p.ptitle collate utf8mb4_0900_as_ci like ? or p.pcontent collate utf8mb4_0900_as_ci like ?)\n"
+                        + "order by p.ptime desc \n"
                         + "limit ? offset ?;";
                 ps = conn.prepareStatement(query);
                 ps.setString(1,cate);
@@ -479,7 +461,8 @@ public class DAO {
                         + "and p.categoryID = c.categoryID\n"
                         + "and p.categoryID = ? \n"
                         + "and p.ptime >= now() - interval 1 " + time + " \n"
-                        + "and (p.ptitle like ? or p.pcontent like ?)\n"
+                        + "and (p.ptitle collate utf8mb4_0900_as_ci like ? or p.pcontent collate utf8mb4_0900_as_ci like ?)\n"
+                        + "order by p.ptime desc \n"
                         + "limit ? offset ?;";
                 ps = conn.prepareStatement(query);
                 ps.setString(1,cate);
@@ -517,7 +500,7 @@ public class DAO {
             // tim kiem tat ca chuyen muc va thoi gian
             if(cate.equals("allCates") && time.equals("allTime")){
                 query = "select count(*) from posts\n"
-                        + "where ptitle like ? or pcontent like ? ;";
+                        + "where ptitle collate utf8mb4_0900_as_ci like ? or pcontent collate utf8mb4_0900_as_ci like ? ;";
                 ps = conn.prepareStatement(query);
                 ps.setString(1, "%" + txt + "%");
                 ps.setString(2, "%" + txt + "%");
@@ -526,7 +509,7 @@ public class DAO {
             // tim kiem tat ca chuyen muc trong 1 khoang thoi gian
             else if(cate.equals("allCates") && !time.equals("allTime")){
                 query = "select count(*) from posts\n"
-                        + "where (ptitle like ? or pcontent like ?)\n"
+                        + "where (ptitle collate utf8mb4_0900_as_ci like ? or pcontent collate utf8mb4_0900_as_ci like ?)\n"
                         + "and ptime >= now() - interval 1 " + time +";";
                 ps = conn.prepareStatement(query);
                 
@@ -537,7 +520,7 @@ public class DAO {
             // tim kiem 1 chuyen muc trong tat ca thoi gian
             else if(!cate.equals("allCates") && time.equals("allTime")){
                 query = "select count(*) from posts\n"
-                        + "where (ptitle like ? or pcontent like ? )\n"
+                        + "where (ptitle collate utf8mb4_0900_as_ci like ? or pcontent collate utf8mb4_0900_as_ci like ? )\n"
                         + "and categoryID = ?;";
                 ps = conn.prepareStatement(query);
               
@@ -549,7 +532,7 @@ public class DAO {
             // tim kiem 1 chuyen muc trong 1 khoang thoi gian
             else{
                 query = "select count(*) from posts\n"
-                        + "where (ptitle like ? or pcontent like ? )\n"
+                        + "where (ptitle collate utf8mb4_0900_as_ci like ? or pcontent collate utf8mb4_0900_as_ci like ? )\n"
                         + "and ptime >= now() - interval 1 " +time + " \n"
                         + "and categoryID = ?;";
                 ps = conn.prepareStatement(query);
@@ -808,6 +791,70 @@ public class DAO {
         }
         return false;
     }
+    // USERS
+    public User getUserByAccount(String acc){
+        String query = "SELECT * FROM users\n"
+                + "where uaccount = ? ;";
+        User user = null;
+        try{
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, acc);
+            rs = ps.executeQuery();
+            if(rs.next()){
+                user = new User(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getBoolean(5));
+            }
+            close();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return user;
+    }
+    
+    public User getUserByID(String uid){
+        String query = "SELECT * FROM users\n"
+                + "where userID = ?;";
+        User res = null;
+        try{
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, uid);
+            rs = ps.executeQuery();
+            if(rs.next()){
+                res = new User(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getBoolean(5));
+            }
+            close();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return res;
+    }
+    public int getEditorIDByPostID(int postID){
+        String query = " select userID from posts\n"
+                + " where postID = ?;";
+        int res = 0;
+        try{
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, postID);
+            rs = ps.executeQuery();
+            if(rs.next()){
+                res = rs.getInt(1);
+            }
+            close();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return res;
+    }
     //login, signup
     public User login(String acc, String pass){
         String query = "select * from users \n"
@@ -914,7 +961,9 @@ public class DAO {
 //        for(Comment x : l){
 //            System.out.println(x.getCcontent());
 //        }
-           Comment cmt = dao.getCommentByID("1");
-           System.out.println(cmt.getCcontent());
+          List<Post> l = dao.get10Posts("tin-duoc-yeu-thich", 2);
+          for(Post x : l){
+              System.out.println(x.getPtitle());
+          }
     } 
 }

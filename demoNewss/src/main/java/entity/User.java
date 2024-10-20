@@ -22,6 +22,7 @@ public class User implements Serializable{
         this.upassword = upassword;
         this.uname = uname;
     }
+    // lay user tu csdl
     public User(int userID, String uaccount, String upassword, String uname, boolean ueditor) {
         this.userID = userID;
         this.uaccount = uaccount;

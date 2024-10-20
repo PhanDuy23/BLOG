@@ -22,7 +22,7 @@ import java.util.List;
  *
  * @author doanm
  */
-@WebServlet(name = "UpdatePostControl", urlPatterns = {"/tao-bai","/sua-bai"})
+@WebServlet(name = "UpdatePostControl", urlPatterns = {"/tao-bai","/sua-bai","/xoa-bai"})
 public class UpdatePostControl extends HttpServlet {
 
     /**
@@ -56,7 +56,14 @@ public class UpdatePostControl extends HttpServlet {
             String pid = request.getParameter("pid");
             Post post = dao.getPostByID(pid);
             request.setAttribute("p", post);
+            List<Category> categories = dao.getAllCategories();
+            request.setAttribute("categories", categories);
             request.getRequestDispatcher("/updatePost.jsp").forward(request, response);
+        }
+        else if(action.equals("/xoa-bai")){
+            String pid = request.getParameter("pid");
+            dao.deletePost(pid);
+            response.sendRedirect("tai-khoan?muc=bai-viet");
         }
     }
 
@@ -94,6 +101,9 @@ public class UpdatePostControl extends HttpServlet {
             String title = request.getParameter("title");
             String image = request.getParameter("image");
             String content = request.getParameter("content");
+            System.out.println(title);
+            System.out.println(image);
+            System.out.println(content);
             Post post = new Post(title,image,content,categoryID);
             dao.updatePost(pid,post);
             response.sendRedirect("paging");

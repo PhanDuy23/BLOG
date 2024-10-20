@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${p.ptitle}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-
+    <base href="${pageContext.request.contextPath}/">
     <style>
         * {
             box-sizing: border-box;
@@ -40,7 +40,7 @@
 
 <body>
     <div class="header">
-        <a href="${pageContext.request.contextPath}/paging">
+        <a href="paging">
             <h1>Trang tin tức</h1>
         </a>
         
@@ -64,21 +64,21 @@
                         <div style="display: flex; flex-direction: column; justify-content: space-around;">
                             <div
                                 style="background-color: #C92127; color: rgb(22, 5, 5); margin: 10px; border-radius: 5px; text-align: center; padding: 10px;">
-                                <a href="${pageContext.request.contextPath}/dang-nhap">Đăng nhập</a></div>
+                                <a href="dang-nhap">Đăng nhập</a></div>
                             <div
                                 style="background-color: rgb(189, 20, 20);margin: 10px; border: 1px solid #ddd6d7;padding: 10px; border-radius: 5px; text-align: center;">
-                                <a href="${pageContext.request.contextPath}/dang-ki">Đăng kí</a></div>
+                                <a href="dang-ki">Đăng kí</a></div>
                         </div>
                     </c:if>
                     <c:if test="${sessionScope.user != null}">
                         <div class="loggedIn" style="display: flex; flex-direction: column; background-color: rgb(118, 112, 112);">
-                            <a href="${pageContext.request.contextPath}/tai-khoan?muc=thong-tin">Thông tin tài khoản</a>
-                            <a href="${pageContext.request.contextPath}/tai-khoan?muc=binh-luan">Hoạt động bình luận</a>
+                            <a href="tai-khoan?muc=thong-tin">Thông tin tài khoản</a>
+                            <a href="tai-khoan?muc=binh-luan">Hoạt động bình luận</a>
                             <c:if test="${sessionScope.user.ueditor == true}">
-                                <a href="${pageContext.request.contextPath}/tai-khoan?muc=bai-viet">Bài viết của bạn</a>
+                                <a href="tai-khoan?muc=bai-viet">Bài viết của bạn</a>
                             </c:if>
-                            <a href="${pageContext.request.contextPath}/tai-khoan?muc=yeu-thich">Tin yêu thích</a>
-                            <a href="${pageContext.request.contextPath}/dang-xuat">Đăng xuất</a>
+                            <a href="tai-khoan?muc=yeu-thich">Tin yêu thích</a>
+                            <a href="dang-xuat">Đăng xuất</a>
                         </div>
                     </c:if>
                 </div>
@@ -88,11 +88,11 @@
         
         <!--CAC MUC TIN-->
         <div class="menu" style="display: flex; border: 1px solid black; width: 70%; ">
-            <a href="${pageContext.request.contextPath}/paging?mucTin=tin-xu-huong&trang=1">Tin xu hướng</a>
-            <a href="${pageContext.request.contextPath}/paging?mucTin=tin-duoc-yeu-thich&trang=1">Tin được yêu thích nhất</a>
+            <a href="paging?mucTin=tin-xu-huong&trang=1">Tin xu hướng</a>
+            <a href="paging?mucTin=tin-duoc-yeu-thich&trang=1">Tin được yêu thích nhất</a>
             
             <c:forEach var="o" items="${listC}">
-                <a href="${pageContext.request.contextPath}/paging?mucTin=${o.cslug}&trang=1" >${o.cname}</a>
+                <a href="paging?mucTin=${o.cslug}&trang=1" >${o.cname}</a>
             </c:forEach>
             
         </div>
@@ -101,7 +101,7 @@
             <p>Chuyên mục: ${p.categoryName}</p>
             <h3>${p.ptitle}</h3>
             
-            <a href="#">${p.editorName}</a>
+            <a href="tac-gia?eid=${p.editorID}">${p.editorName}</a>
             <p>${p.dayOfWeek}, ${p.formattedPtime}</p>
             <img src="${p.pimage}" alt="ảnh" width="90%" >
             
@@ -111,12 +111,12 @@
             
             <!--<pre></pre>-->
             <p id="cntLike">Số lượt thích:</p>
-            <a href="${pageContext.request.contextPath}/like?pid=${p.postID}">&#128077; ${p.plikes}</a>
-            <button id="like" style="background-color:white;">emoji</button>
-            <p>Bình luận: </p>
+            <a href="like?pid=${p.postID}">&#128077; ${p.plikes}</a>
+            <button id="like" style="background-color:white;">like</button>
+            <p>Bình luận(${comments.size()}) </p>
             
             <!--Khong update comment-->
-            <c:if test="${sessionScope.updateComment = null}">
+            <c:if test="${sessionScope.updateComment == null}">
                 <c:forEach var="o" items="${comments}">
                     <div style=" border: 1px solid black"> 
                         <a href="#">${o.userName}</a>
@@ -127,7 +127,7 @@
             </c:if>
             
             <!--Khi update comment-->
-            <c:if test="${sessionScope.updateComment = true}">
+            <c:if test="${sessionScope.updateComment == true}">
                 <c:forEach var="o" items="${comments}">
                     <div style=" border: 1px solid black"> 
                         <c:if test="${o.commentID != Comment.commentID}">
@@ -141,18 +141,18 @@
                 
             <div>
                 <!--Khi khong sua comment-->
-                <c:if test="${sessionScope.updateComment = null}">
-                    <form action="${pageContext.request.contextPath}/binh-luan" method="post">
-                        <label for="comment">Bình luận của bạn</label>
-                        <textarea name="comment" id="comment" placeholder="bình luận" rows="10" cols="50"></textarea>
+                <c:if test="${sessionScope.updateComment == null}">
+                    <form action="binh-luan" method="post">
+                        <!--<label for="comment">Bình luận của bạn</label>-->
+                        <textarea name="comment" id="comment" placeholder="bình luận của bạn" rows="10" cols="50"></textarea>
                         <input type="hidden" name="postID" value="${p.postID}">
-                        <button type="submit">Gửi</button>
+                        <button type="submit">Gửi bình luận</button>
                     </form>
                 </c:if>
                 
                 <!--KHI SUA COMMENT-->
-                <c:if test="${sessionScope.updateComment = true}">
-                    <form action="${pageContext.request.contextPath}/binh-luan" method="post">
+                <c:if test="${sessionScope.updateComment == true}">
+                    <form action="binh-luan" method="post">
                         <label for="comment">Bình luận của bạn</label>
                         <textarea name="comment" id="comment" placeholder="bình luận" rows="10" cols="50" required>${sessionScope.Comment.ccontent}</textarea>
                         <input type="hidden" name="postID" value="${p.postID}">
@@ -170,7 +170,7 @@
             <h3>${p.categoryName}</h3>
                 <c:forEach var="o" items="${relatedPosts}">
                     <div style="display: flex; flex-direction: column; border: 1px solid black">
-                        <a href="${pageContext.request.contextPath}/post/${o.pslug}">
+                        <a href="post/${o.pslug}">
                             <h3>${o.ptitle}</h3>
                         </a>
                         <div style = "display: flex; ">
@@ -178,7 +178,7 @@
                             <div style = "display: flex; flex-direction: column">
 <!--                                <h4>${o.editorName}</h4>
                                 <h4>${o.dayOfWeek}, ${o.formattedPtime}</h4>-->
-                                <p>${o.firstSentence}</p>
+                                <p>${o.description}</p>
                                 
                             </div>
                         </div>

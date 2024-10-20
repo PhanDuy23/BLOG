@@ -9,7 +9,7 @@
     <title>Tìm kiếm</title>
     <link rel="stylesheet" href="home.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-
+    <base href="${pageContext.request.contextPath}/">
     <style>
         * {
             box-sizing: border-box;
@@ -41,10 +41,10 @@
 
 <body>
     <div class="header">
-        <a href="link">
-            <h1>LOGO</h1>
+        <a href="paging">
+            <h1>Trang tin tức</h1>
         </a>
-        <h1>NEWS</h1>
+        
 
     </div>
 
@@ -64,10 +64,10 @@
                         <div style="display: flex; flex-direction: column; justify-content: space-around;">
                             <div
                                 style="background-color: #C92127; color: rgb(22, 5, 5); margin: 10px; border-radius: 5px; text-align: center; padding: 10px;">
-                                <a href="${pageContext.request.contextPath}/dang-nhap">Đăng nhập</a></div>
+                                <a href="dang-nhap">Đăng nhập</a></div>
                             <div
                                 style="background-color: rgb(189, 20, 20);margin: 10px; border: 1px solid #ddd6d7;padding: 10px; border-radius: 5px; text-align: center;">
-                                <a href="${pageContext.request.contextPath}/dang-ki">Đăng kí</a></div>
+                                <a href="dang-ki">Đăng kí</a></div>
                         </div>
                     </c:if>
                     <c:if test="${sessionScope.user != null}">
@@ -75,32 +75,32 @@
                             <a href="">Thông tin tài khoản</a>
                             <a href="">Hoạt động bình luận</a>
                             <c:if test="${sessionScope.user.ueditor == true}">
-                                <a href="${pageContext.request.contextPath}/tao-bai">Bài viết của bạn</a>
+                                <a href="tao-bai">Bài viết của bạn</a>
                             </c:if>
                             <a href="">Tin yêu thích</a>
-                            <a href="${pageContext.request.contextPath}/dang-xuat">Đăng xuất</a>
+                            <a href="dang-xuat">Đăng xuất</a>
                         </div>
                     </c:if>
                 </div>
             </div>
-            <a href="${pageContext.request.contextPath}/tim-kiem">search</a>
+            <a href="tim-kiem">search</a>
             <input type="text" placeholder="tìm kiếm" style="height: 40px;">
         </div>
 
 
         <!--CÁC CHUYÊN MỤC-->
         <div class="menu" style="display: flex; border: 1px solid black; width: 70%; ">
-            <a href="${pageContext.request.contextPath}/paging?mucTin=tin-xu-huong&trang=1">Tin xu hướng</a>
-            <a href="${pageContext.request.contextPath}/paging?mucTin=tin-duoc-yeu-thich&trang=1">Tin được yêu thích nhất</a>
+            <a href="paging?mucTin=tin-xu-huong&trang=1">Tin xu hướng</a>
+            <a href="paging?mucTin=tin-duoc-yeu-thich&trang=1">Tin được yêu thích nhất</a>
             
             <c:forEach var="o" items="${listC}">
-                <a href="${pageContext.request.contextPath}/paging?mucTin=${o.cslug}&trang=1" >${o.cname}</a>
+                <a href="paging?mucTin=${o.cslug}&trang=1" >${o.cname}</a>
             </c:forEach>
         </div>
         
         <!--PHẦN TÌM KIẾM-->
         <div class="search" style="border: 1px solid black; width: 70%;">
-            <form action="${pageContext.request.contextPath}/tim-kiem" method="get">
+            <form action="tim-kiem" method="get">
                 <input type="text" placeholder="tìm kiếm" value="${Txt}" name="txt" style="width: 80%;">
                 <div style="display: flex;">
                 <label for="cate">Chuyên mục</label>
@@ -133,13 +133,13 @@
                 
                 <c:forEach var="o" items="${listP}">
                     <div style="display: flex; flex-direction: column; border: 1px solid black">
-                        <a href="${pageContext.request.contextPath}/post/${o.pslug}">
+                        <a href="post/${o.pslug}">
                             <h3>${o.ptitle}</h3>
                         </a>
                         <div style = "display: flex; ">
                             <img src="${o.pimage}" alt="ảnh" width="30%">
                             <div style = "display: flex; flex-direction: column">                              
-                                <p>${o.firstSentence}</p>
+                                <p>${o.description}</p>
                             </div>
                         </div>
                     
@@ -151,7 +151,7 @@
     <!--PHÂN TRANG-->
     <div class="button" style="display: flex;  justify-content: center;">
         <c:forEach var="i" begin="1" end="${searchPages}">
-            <a href="${pageContext.request.contextPath}/tim-kiem?txt=${Txt}&cate=${Cate}&time=${Time}&trang=${i}">${i}</a>
+            <a href="tim-kiem?txt=${Txt}&cate=${Cate}&time=${Time}&trang=${i}">${i}</a>
         </c:forEach>
     </div>
 

@@ -15,5 +15,6 @@ entity\Comment.class
 entity\Post.class
 control\LogOutControl.class
 control\UpdatePostControl.class
+control\EditorControl.class
 control\PagingControl.class
 control\SearchControl.class

@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 <!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>-->
-
+    <base href="${pageContext.request.contextPath}/">
     <title>News</title>
     <style>
         * {
@@ -44,14 +44,17 @@
 </head>
 
 <body>
-    <header>
-        <a href="${pageContext.request.contextPath}/paging">Trang tin tức</a>
-    </header>
+    
+    
+    
     
     <!--BODY-->
     <div class="body" style="display: flex; flex-direction: column; align-items: center; ">
         <!--Ô TÀI KHOẢN-->
         <div class="login" style="display: flex;   width: 70%; justify-content: end;">
+            <a href="paging">Trang tin tức</a>
+            <img src="https://is5-ssl.mzstatic.com/image/thumb/Purple71/v4/1a/30/c4/1a30c461-520e-0983-3a3e-af096574d87a/source/512x512bb.jpg"
+                    alt="logo" width="50%" height="auto">
             <div class="taikhoan" style="display: flex; flex-direction: column;z-index: 4;  justify-content: center;align-items: center;  border: 1px solid black;">
                 <i class="fa-regular fa-user"></i>
                 <c:if test="${sessionScope.user == null}">
@@ -65,37 +68,37 @@
                         <div style="display: flex; flex-direction: column; justify-content: space-around;">
                             <div
                                 style="background-color: #C92127; color: rgb(22, 5, 5); margin: 10px; border-radius: 5px; text-align: center; padding: 10px;">
-                                <a href="${pageContext.request.contextPath}/dang-nhap">Đăng nhập</a></div>
+                                <a href="dang-nhap">Đăng nhập</a></div>
                             <div
                                 style="background-color: rgb(189, 20, 20);margin: 10px; border: 1px solid #ddd6d7;padding: 10px; border-radius: 5px; text-align: center;">
-                                <a href="${pageContext.request.contextPath}/dang-ki">Đăng kí</a></div>
+                                <a href="dang-ki">Đăng kí</a></div>
                         </div>
                     </c:if>
                     <c:if test="${sessionScope.user != null}">
                         <div class="loggedIn" style="display: flex; flex-direction: column; background-color: rgb(118, 112, 112);">
-                            <a href="${pageContext.request.contextPath}/tai-khoan?muc=thong-tin">Thông tin tài khoản</a>
-                            <a href="${pageContext.request.contextPath}/tai-khoan?muc=binh-luan">Hoạt động bình luận</a>
+                            <a href="tai-khoan?muc=thong-tin">Thông tin tài khoản</a>
+                            <a href="tai-khoan?muc=binh-luan">Hoạt động bình luận</a>
                             <c:if test="${sessionScope.user.ueditor == true}">
-                                <a href="${pageContext.request.contextPath}/tai-khoan?muc=bai-viet">Bài viết của bạn</a>
+                                <a href="tai-khoan?muc=bai-viet">Bài viết của bạn</a>
                             </c:if>
-                            <a href="${pageContext.request.contextPath}/tai-khoan?muc=yeu-thich">Tin yêu thích</a>
-                            <a href="${pageContext.request.contextPath}/dang-xuat">Đăng xuất</a>
+                            <a href="tai-khoan?muc=yeu-thich">Tin yêu thích</a>
+                            <a href="dang-xuat">Đăng xuất</a>
                         </div>
                     </c:if>
                 </div>
             </div>
-            <a href="${pageContext.request.contextPath}/tim-kiem">search</a>
+            <a href="tim-kiem">search</a>
             <input type="text" placeholder="tìm kiếm" style="height: 40px;">
         </div>
 
 
         <!--CÁC CHUYÊN MỤC-->
         <div class="menu" style="display: flex; border: 1px solid black; width: 70%; ">
-            <a href="${pageContext.request.contextPath}/paging?mucTin=tin-xu-huong&trang=1">Tin xu hướng</a>
-            <a href="${pageContext.request.contextPath}/paging?mucTin=tin-duoc-yeu-thich&trang=1">Tin được yêu thích nhất</a>
+            <a href="paging?mucTin=tin-xu-huong&trang=1">Tin xu hướng</a>
+            <a href="paging?mucTin=tin-duoc-yeu-thich&trang=1">Tin được yêu thích nhất</a>
             
             <c:forEach var="o" items="${listC}">
-                <a href="${pageContext.request.contextPath}/paging?mucTin=${o.cslug}&trang=1" >${o.cname}</a>
+                <a href="paging?mucTin=${o.cslug}&trang=1" >${o.cname}</a>
             </c:forEach>
         </div>
         
@@ -107,20 +110,20 @@
                 </c:if>
                 <c:forEach var="o" items="${listP}">
                     <div style="display: flex; flex-direction: column; border: 1px solid black">
-                        <a href="${pageContext.request.contextPath}/post/${o.pslug}">
+                        <a href="post/${o.pslug}">
                             <h3>${o.ptitle}</h3>
                         </a>
                         <div style = "display: flex; ">
                             <img src="${o.pimage}" alt="ảnh" width="30%">
                             <div style = "display: flex; flex-direction: column">
-<!--                                <h4>${o.editorName}</h4>
-                                <h4>${o.dayOfWeek}, ${o.formattedPtime}</h4>-->
-                                <p>${o.firstSentence}</p>
+                              
+                                <p>${o.description}</p>
                                 <c:if test="${entry == 'tin-duoc-yeu-thich'}">
                                     <p>Lượt thích: ${o.plikes}</p>
                                 </c:if>
                                 <c:if test="${entry == 'tin-xu-huong'}">
                                     <p>Lượt xem: ${o.pclicks}</p>
+                                    <p>${o.dayOfWeek}, ${o.formattedPtime}</p>
                                 </c:if>
                             </div>
                         </div>
@@ -128,30 +131,7 @@
                     </div>
                 </c:forEach>
         </div>
-<!--        <div class="newsContainer2" style="display: none; flex-direction: column; width: 70%; border: 1px solid black;">
-            <div class="oneNews" style="border: 1px solid black;">
-                <h3>Tiêu đề     trang 2</h3>
-                <div style="display: flex;">
-                    <img src="https://cdnphoto.dantri.com.vn/DvD5TRVMqbJ0rTyJWlpcebtvTpg=/zoom/774_516/2024/10/06/thumb-1728229784459.png"
-                        alt="ảnh" width="30%">
-                    <p>Đoạn văn</p>
-                </div>
 
-            </div>
-
-        </div>-->
-<!--        <div class="newsContainer3" style="display: none; flex-direction: column; width: 70%; border: 1px solid black;">
-            <div class="oneNews" style="border: 1px solid black;">
-                <h3>tiêu đề trang 333333</h3>
-                <div style="display: flex;">
-                    <img src="https://cdnphoto.dantri.com.vn/DvD5TRVMqbJ0rTyJWlpcebtvTpg=/zoom/774_516/2024/10/06/thumb-1728229784459.png"
-                        alt="ảnh" width="30%">
-                    <p>Đoạn văn</p>
-                </div>
-
-            </div>
-
-        </div>-->
     </div>
             
     <!--PHÂN TRANG TIN-->
@@ -161,7 +141,7 @@
                 <a href="paging?trang=${i}">${i}</a>
             </c:if>
             <c:if test="${mucTin!=null}">
-                <a href="${pageContext.request.contextPath}/paging?mucTin=${entry}&trang=${i}">${i}</a>
+                <a href="paging?mucTin=${entry}&trang=${i}">${i}</a>
             </c:if>
         </c:forEach>
     </div>

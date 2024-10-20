@@ -4,6 +4,7 @@
  */
 package entity;
 
+import dao.DAO;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -41,6 +42,9 @@ public class Post implements Serializable{
         this.editorName = editorName;
         this.categoryName = categoryName;
         this.pslug = URLSlug.generateSlug(this.ptitle, this.postID+"");
+        DAO dao = new DAO();
+        this.categoryID = dao.getCategoryIDByName(this.categoryName);
+        this.editorID = dao.getEditorIDByPostID(this.postID);
     }
     // dung khi tao bai viet moi
     public Post(String title, String image, String content, int categoryID, int editorID){
@@ -74,8 +78,17 @@ public class Post implements Serializable{
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         return sdf.format(ptime);
     }
-    public String getFirstSentence(){
-        return pcontent.substring(0,pcontent.indexOf("\n"));
+    public String getDescription(){
+        if(pcontent.contains("\n")) return pcontent.substring(0,pcontent.indexOf("\n"));
+        if(pcontent.matches(".*[.!?].*")){
+            int i1 = pcontent.indexOf("."), i2 = pcontent.indexOf("?"), i3 = pcontent.indexOf("!");
+            int idx = pcontent.length();
+            if(i1 != -1 && idx > i1) idx = i1;
+            if(i2 != -1 && idx > i2) idx = i2;
+            if(i3 != -1 && idx > i3) idx = i3;
+            return pcontent.substring(0,idx+1);
+        }
+        return pcontent;
     }
     public String getCategoryName() {
         return categoryName;

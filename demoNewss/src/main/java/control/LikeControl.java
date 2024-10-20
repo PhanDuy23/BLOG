@@ -20,7 +20,7 @@ import jakarta.servlet.http.HttpSession;
  *
  * @author doanm
  */
-@WebServlet(name = "LikeControl", urlPatterns = {"/like"})
+@WebServlet(name = "LikeControl", urlPatterns = {"/like","/unlike"})
 public class LikeControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -29,15 +29,22 @@ public class LikeControl extends HttpServlet {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
         if(user != null){
+            String action = request.getServletPath();
+            DAO dao = new DAO();
             String postID = request.getParameter("pid");
             int userID = user.getUserID();
-            DAO dao = new DAO();
-            System.out.println("userID =" + userID);
-            System.out.println("postID =" + postID);
-            dao.like(userID,postID);
-            Post post = dao.getPostByID(postID);
-            String url = "post/" + post.getPslug();
-            response.sendRedirect(url);
+            if(action.equals("/like")){
+                System.out.println("userID =" + userID);
+                System.out.println("postID =" + postID);
+                dao.like(userID,postID);
+                Post post = dao.getPostByID(postID);
+                String url = "post/" + post.getPslug();
+                response.sendRedirect(url);
+            }
+            else if(action.equals("/unlike")){
+                dao.unlike(userID, postID);
+                response.sendRedirect("tai-khoan?muc=yeu-thich");
+            }
         }else{
             response.sendRedirect("login.jsp");
         }

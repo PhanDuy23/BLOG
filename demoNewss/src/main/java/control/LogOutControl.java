@@ -24,7 +24,9 @@ public class LogOutControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        request.getSession().invalidate();
+        HttpSession ss  = request.getSession();
+        ss.removeAttribute("user");
+        ss.invalidate();
         response.sendRedirect("paging");
     }
 

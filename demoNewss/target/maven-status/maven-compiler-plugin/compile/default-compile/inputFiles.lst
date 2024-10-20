@@ -10,6 +10,7 @@ D:\IT\java\web project\BLOG\demoNewss\src\main\java\entity\Comment.java
 D:\IT\java\web project\BLOG\demoNewss\src\main\java\control\LoginControl.java
 D:\IT\java\web project\BLOG\demoNewss\src\main\java\dao\DAO.java
 D:\IT\java\web project\BLOG\demoNewss\src\main\java\entity\User.java
+D:\IT\java\web project\BLOG\demoNewss\src\main\java\control\AccountControl.java
 D:\IT\java\web project\BLOG\demoNewss\src\main\java\control\PagingControl.java
 D:\IT\java\web project\BLOG\demoNewss\src\main\java\control\CommentControl.java
 D:\IT\java\web project\BLOG\demoNewss\src\main\java\control\HomeControl.java
