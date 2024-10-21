@@ -39,6 +39,7 @@ public class SearchControl extends HttpServlet {
             request.getRequestDispatcher("search.jsp").forward(request,response);
         }
         else{
+            txt = txt.strip();
             String cate = request.getParameter("cate");
             if(cate.equals("0")) cate = "allCates";
             String time = request.getParameter("time");

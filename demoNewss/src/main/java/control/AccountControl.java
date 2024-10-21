@@ -5,6 +5,7 @@
 package control;
 
 import dao.DAO;
+import entity.Category;
 import entity.Comment;
 import entity.Post;
 import entity.User;
@@ -52,6 +53,11 @@ public class AccountControl extends HttpServlet {
             List<Post> posts = dao.getPostsByUserID(user.getUserID());
             request.setAttribute("posts", posts);
             request.getRequestDispatcher("acc_posts.jsp").forward(request,response);
+        }
+        else if(muc.equals("chuyen-muc")){
+            List<Category> categories = dao.getAllCategories();
+            request.setAttribute("categories",categories);
+            request.getRequestDispatcher("acc_categories.jsp").forward(request,response);
         }
     }
 

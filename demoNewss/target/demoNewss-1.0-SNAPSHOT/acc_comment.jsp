@@ -1,7 +1,7 @@
 <!--
-<%--<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>--%>
-<!DOCTYPE html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+--><!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -12,26 +12,27 @@
 </head>
 <body>
     
-    CAC MUC CUA TAI KHOAN
+    <!--CAC MUC CUA TAI KHOAN-->
     <div class="sidebar">
         <a href="tai-khoan?muc=thong-tin" class="active"><i class="fas fa-user"></i>Thông tin tài khoản</a>
         <a href="tai-khoan?muc=binh-luan"><i class="fas fa-comments"></i>Hoạt động bình luận</a>
         <%--<c:if test="${sessionScope.user.ueditor == true}">--%>
             <a href="tai-khoan?muc=bai-viet"<i class="fas fa-newspaper"></i>Bài viết của bạn</a>
+            <a href="tai-khoan?muc=chuyen-muc">Chuyên mục</a>
         <%--</c:if>--%>
         <a href="tai-khoan?muc=yeu-thich"><i class="fas fa-like"></i>Tin yêu thích</a>
         <a href="dang-xuat"><i class="fas fa-sign-out-alt"></i>Đăng xuất</a>
     </div>
     
-    CAC BÌNH LUẬN CỦA NGƯỜI DÙNG
+    <!--CAC BÌNH LUẬN CỦA NGƯỜI DÙNG-->
     <div class="content">
         <h1>
          Hoạt động bình luận
         </h1>
-        <%--<c:forEach var="o" items="${comments}">--%>
+        <c:forEach var="o" items="${comments}">
             <div class="comment-date">
-                <!--${o.formattedCtime}-->
-<!--            </div>
+                ${o.formattedCtime}
+               </div>
             <div class="comment">
                 <img alt="User avatar" height="50" src="https://storage.googleapis.com/a1aa/image/RVO2GAGSBbK3I5Sn4hhRftktQcJLfYxd5xlA4JxurQ0WvinTA.jpg" width="50"/>
                     <div class="comment-text">
@@ -51,16 +52,15 @@
                       </div>
                     </div>
             </div>
-        <%--</c:forEach>--%>
+        </c:forEach>
         
-
        </div>
 </body>
-</html>-->-->
+</html>
         
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
+<%--<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>--%>
+<!--<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -68,8 +68,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="home.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-    <!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
     <title>News</title>
 
@@ -77,9 +77,6 @@
 </head>
 
 <body>
-
-
-
 
     <div class="body" style="display: flex; flex-direction: column; align-items: center; ">
 
@@ -145,7 +142,7 @@
         </div>
 
         <div class="newsContainer1" style="display: flex; flex-direction: column; width: 70%; ">
- <!--CAC MUC CUA TAI KHOAN-->
+ CAC MUC CUA TAI KHOAN
  <div class="sidebar">
     <a href="tai-khoan?muc=thong-tin" class="active"><i class="fas fa-user"></i>Thông tin tài khoản</a>
     <a href="tai-khoan?muc=binh-luan"><i class="fas fa-comments"></i>Hoạt động bình luận</a>
@@ -156,7 +153,7 @@
     <a href="dang-xuat"><i class="fas fa-sign-out-alt"></i>Đăng xuất</a>
 </div>
 
-<!--CAC BÌNH LUẬN CỦA NGƯỜI DÙNG-->
+CAC BÌNH LUẬN CỦA NGƯỜI DÙNG
 <div class="content">
     <h1>
      Hoạt động bình luận
@@ -226,4 +223,4 @@
     </script>
 </body>
 
-</html>
+</html>-->

@@ -76,6 +76,7 @@
                             <a href="tai-khoan?muc=binh-luan">Hoạt động bình luận</a>
                             <c:if test="${sessionScope.user.ueditor == true}">
                                 <a href="tai-khoan?muc=bai-viet">Bài viết của bạn</a>
+                                <a href="tai-khoan?muc=chuyen-muc">Chuyên mục</a>
                             </c:if>
                             <a href="tai-khoan?muc=yeu-thich">Tin yêu thích</a>
                             <a href="dang-xuat">Đăng xuất</a>

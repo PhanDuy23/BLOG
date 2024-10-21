@@ -351,7 +351,8 @@ public class DAO {
             rs = ps.executeQuery();
             while(rs.next()){
                 list.add(new Category(rs.getInt(1),
-                        rs.getString(2)));
+                        rs.getString(2),
+                        rs.getString(3)));
             }
             close();
             return list;
@@ -378,7 +379,7 @@ public class DAO {
         }
         return res;
     }
-    public String getCategoryByID(String categoryID){
+    public String getCategoryNameByID(String categoryID){
         String query = "select cname from categories\n"
                 + "where categoryID = ?;";
         try{
@@ -397,7 +398,112 @@ public class DAO {
         }
         return null;
     }
-    
+    public Category getCategoryByID(String cid){
+        String query = "select * from categories\n"
+                + "where categoryID = ?;";
+        Category res = null;
+        try{
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, cid);
+            rs = ps.executeQuery();
+            if(rs.next()){
+                res = new Category(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3));
+            }
+            close();
+            
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return res;
+    }
+    public int addCategory(Category cate){
+        String check1 = "select * from categories\n"
+                + "where cname = ? ;";
+        String check2 = "select * from categories\n"
+                + "where cdescription = ?;";
+        String query = "insert into categories (cname,cdescription)\n"
+                + "values (?,?);";
+        try{
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(check1);
+            ps.setString(1, cate.getCname());
+            rs = ps.executeQuery();
+            if(rs.next()){
+                return 1;
+            }
+            ps = conn.prepareStatement(check2);
+            ps.setString(1, cate.getCdescription());
+            rs = ps.executeQuery();
+            if(rs.next()){
+                return 2;
+            }
+            ps = conn.prepareStatement(query);
+            ps.setString(1, cate.getCname());
+            ps.setString(2, cate.getCdescription());
+            ps.executeUpdate();
+            close();
+            
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    public int updateCategory(Category cate){
+        String check1 = "select * from categories\n"
+                + "where cname = ? \n"
+                + "and categoryID != ?;";
+        String check2 = "select * from categories\n"
+                + "where cdescription = ?\n"
+                + "and categoryID != ?;";
+        String query = "update categories\n"
+                + "set cname = ?, cdescription = ? \n"
+                + "where categoryID = ?;";
+        try{
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(check1);
+            ps.setString(1, cate.getCname());
+            ps.setInt(2,cate.getCategoryID());
+            rs = ps.executeQuery();
+            if(rs.next()){
+                return 1;
+            }
+            ps = conn.prepareStatement(check2);
+            ps.setString(1, cate.getCdescription());
+            ps.setInt(2,cate.getCategoryID());
+            System.out.println(cate.getCdescription());
+            System.out.println(cate.getCategoryID());
+            rs = ps.executeQuery();
+            if(rs.next()){
+                return 2;
+            }
+            ps = conn.prepareStatement(query);
+            ps.setString(1, cate.getCname());
+            ps.setString(2, cate.getCdescription());
+            ps.setInt(3,cate.getCategoryID());
+            ps.executeUpdate();
+            close();
+            
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    public void deleteCategory(String cid){
+        String query = "delete from categories\n"
+                + "where categoryID = ?;";
+        try{
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, cid);
+            ps.executeUpdate();
+            close();
+        }catch(Exception e){
+            e.printStackTrace();
+        }      
+    }
     
     // SEARCH
     public List<Post> searchNPosts(int postCount, int pageIndex, String txt, String cate, String time){
@@ -961,9 +1067,8 @@ public class DAO {
 //        for(Comment x : l){
 //            System.out.println(x.getCcontent());
 //        }
-          List<Post> l = dao.get10Posts("tin-duoc-yeu-thich", 2);
-          for(Post x : l){
-              System.out.println(x.getPtitle());
-          }
+        Category cate = new Category(8,"Giáo dục","tin gd");
+        System.out.println(dao.updateCategory(cate));
+          
     } 
 }

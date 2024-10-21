@@ -9,6 +9,7 @@ dao\Test.class
 entity\Category.class
 entity\User.class
 control\CommentControl.class
+control\CategoryControl.class
 control\PostControl.class
 control\SignUpControl.class
 entity\Comment.class

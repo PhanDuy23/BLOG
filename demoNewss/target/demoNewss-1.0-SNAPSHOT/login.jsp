@@ -97,8 +97,7 @@
                 <input type="password" id="password" name="password" value="${password}" required>
                 <div>
                     <label for="remember">Ghi nhớ đăng nhập</label>
-                    <input type="checkbox" id="remember">            
-
+                    <input type="checkbox" name="remember" id="remember">            
                 </div>
                 <button type="submit">Đăng nhập</button>
             </form>

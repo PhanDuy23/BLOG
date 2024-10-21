@@ -55,7 +55,7 @@ public class SignUpControl extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String acc = request.getParameter("account");
+        String acc = request.getParameter("account").strip();
         DAO dao = new DAO();
         if(dao.checkUserExist(acc)!=null){
             request.setAttribute("errorMessage", "Tài khoản đã tồn tại");
