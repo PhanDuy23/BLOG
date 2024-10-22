@@ -1,79 +1,3 @@
-<!--
-<%--<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>--%>
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title>Đăng Nhập</title>
-    <link rel="stylesheet" href="home.css">
-    
-    <style>
-        .container {
-            text-align: center;
-            margin-top: 100px;
-        }
-
-        input[type=text],
-        input[type=password] {
-            width: 200px;
-            padding: 12px 20px;
-            margin: 8px 0;
-            display: inline-block;
-            border: 1px solid #ccc;
-            box-sizing: border-box;
-
-        }
-
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 14px 20px;
-            margin: 8px 0;
-            border: none;
-            cursor: pointer;
-            width: 200px;
-        }
-
-        button:hover {
-            opacity: 0.8;
-
-        }
-    </style>
-</head>
-
-<body>
-    <div class="container">
-        <h1>Đăng nhập</h1>
-        <form action="dang-nhap" method="post">
-            <label for="account">Tên đăng nhập:</label>
-            <input type="text" id="account" name="account" value="${account}" required><br>
-
-            <label for="password">Mật khẩu:</label>
-            <input type="password" id="password" name="password" value="${password}" required><br>
-            <label for="remember">Ghi nhớ đăng nhập</label>
-            <input type="checkbox" name="remember"><br>
-         
-            <button type="submit">Đăng nhập</button>
-        </form>
-    </div>  
-    <p class="text-danger">${message}</p>
-        
-        <form action="dang-ki" method="get">
-            <input type="submit" value="Đăng ký">
-        </form>
-    <script>
-        const form = document.querySelector('form');
-
-        form.addEventListener('submit', (event) => {
-            event.preventDefault();
-            // Thêm logic kiểm tra dữ liệu ở đây
-            console.log('Form submitted');
-        });
-    </script>
-</body>
-
-</html>-->
  <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
  <%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -81,14 +5,35 @@
 
 <head>
     <title>Đăng Nhập</title>
-    <!--<link rel="stylesheet" href="style.css">-->
-   <link rel="stylesheet" href="home.css">
-   
+    <link rel="icon"
+    href="https://is5-ssl.mzstatic.com/image/thumb/Purple71/v4/1a/30/c4/1a30c461-520e-0983-3a3e-af096574d87a/source/512x512bb.jpg"
+    type="image/jpg">
+    <link rel="stylesheet" href="all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+   <style>
+    *{
+        border-radius: 7px;
+        
+    }
+    input{
+        height: 50px;
+        background-color: #E8F0FE;
+        font-size: large;
+    }
+    button{
+        width: 40%; height: 50px; background-color: rgb(82, 143, 82);
+        font-size: larger;
+        font-weight: 700;
+    }
+    button:hover{
+        opacity: 0.7;
+    }
+   </style>
 </head>
 
-<body>
-    <div style="display: flex; justify-content: center;">
-        <div style="width: 30%;">
+<body style="background-color: gray;">
+    <div style="display: flex; justify-content: center; ">
+        <div style="width: 30%; background-color: white;">
             <h1 style="text-align: center;">ĐĂNG NHẬP</h1>
             <form action="dang-nhap" method="post" style="display: flex; flex-direction: column;">
                 <label for="account">Tên đăng nhập:</label>
@@ -97,20 +42,22 @@
                 <input type="password" id="password" name="password" value="${password}" required>
                 <div>
                     <label for="remember">Ghi nhớ đăng nhập</label>
-                    <input type="checkbox" name="remember" id="remember">            
+                    <input style="height: 15px;" type="checkbox" id="remember">            
+
                 </div>
-                <button type="submit">Đăng nhập</button>
+                <div style="display: flex; justify-content: center;">
+                    <button  type="submit" style="width: 100%;">Đăng nhập</button>
+
+                </div>
             </form>
-            <p class="text-danger">${message}</p>
+            <p class="text-danger" style="text-align: center;">${message}</p>
         
             <form action="dang-ki" method="get" style="display: flex; justify-content: center;">
-                <input type="submit" value="Đăng ký">
+                <button type="submit"  value="Đăng ký">Đăng kí</button>
             </form>
         </div>
     </div>
     
-   
-
 </body>
 
 </html>

@@ -49,10 +49,6 @@ public class PostControl extends HttpServlet{
                 }
             }
         }
-//        }else if(action.equals("userPosts")){
-//            User user = (User) reqeust
-//        }
-        
     }
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

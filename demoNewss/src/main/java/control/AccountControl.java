@@ -35,6 +35,8 @@ public class AccountControl extends HttpServlet {
         HttpSession session = request.getSession();
         User user = (User)session.getAttribute("user");
         DAO dao = new DAO();
+        List<Category> listC = dao.getAllCategories();
+        request.setAttribute("listC", listC);
         if(muc.equals("thong-tin")){
             request.getRequestDispatcher("acc_info.jsp").forward(request,response);
         }

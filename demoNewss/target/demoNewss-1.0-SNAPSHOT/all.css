@@ -1,0 +1,93 @@
+* {
+    box-sizing: border-box;
+    position: relative;
+    margin: 5px;
+    padding: 5px;
+    color: black;
+    font-family: 'Times New Roman', Times, serif;
+
+}
+.content{
+    width: 70%;
+}
+a {
+    text-decoration: none;
+    font-size: large;
+    margin: 0;
+    margin-right: 10px;
+}
+
+.menu a:hover {
+    /* color: #d71f1f; */
+    border-bottom: 1px solid rgb(12, 167, 90);
+}
+
+.taikhoan a:hover {
+    font-weight: 700;
+}
+
+.container a:hover {
+    opacity: 0.5;
+}
+.footer a:hover {
+    opacity: 0.5;
+}
+
+input {
+    border: 1px solid black;
+}
+
+button {
+    border: 1px solid black;
+}
+
+.thanhtaikhoan {
+    display: none;
+    width: 100%;
+    position: absolute;
+    border-radius: 6px;
+    top: 200px;
+
+}
+
+.taikhoan {
+    display: flex;
+    flex-direction: column;
+    z-index: 4;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+    border-radius: 7px;
+    min-width: 200px;
+}
+
+.button {
+    display: flex;
+    justify-content: center;
+}
+
+.button a {
+    border: 1px solid black;
+}
+
+
+input,
+select,
+button {
+
+    height: 30px;
+}
+
+.articel div,
+textarea,
+button {
+    border-radius: 7px;
+}
+
+img {
+    border-radius: 20px;
+}
+
+.sidebar{
+    width: 30%;
+}
